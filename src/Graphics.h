@@ -3,6 +3,7 @@
 #include <GL/glew.h>
 
 #include "Logic.h"
+#include "Shader.h"
 
 class Graphics
 {
