@@ -1,5 +1,10 @@
 #include "Shader.h"
 
+Shader::Shader()
+{
+    compiled = false;
+}
+
 Shader::Shader(std::string errStr)
 {
     compiled = false;
@@ -8,7 +13,22 @@ Shader::Shader(std::string errStr)
 
 Shader::Shader(GLuint programID)
 {
+    this->programID = programID;
+}
 
+GLint Shader::getUniformLocation(std::string s)
+{
+    return glGetUniformLocation(programID, s.c_str());
+}
+
+GLint Shader::getAttribLocation(std::string s)
+{
+    return glGetAttribLocation(programID, s.c_str());
+}
+
+GLuint Shader::getProgramID()
+{
+    return programID;
 }
 
 bool Shader::isCompiled()

@@ -5,15 +5,19 @@ Graphics::Graphics(Logic& logic) : logic(logic)
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     glEnable( GL_BLEND | GL_TEXTURE_2D );
 
-    Shader s = Shader::loadShaderFromFile("./default");
-    if( !s.isCompiled() )
+    defaultShader = Shader::loadShaderFromFile("./default");
+    if( !defaultShader.isCompiled() )
     {
-        printf("%s", s.getErrorString().c_str());
+        printf("%s", defaultShader.getErrorString().c_str());
     }
+    projectionMatrix = glm::ortho(0.0f, 640.0f, 0.0f, 480.0f);
+    
 }
 
 void Graphics::render()
 {
+    glUseProgram(defaultShader.getProgramID());
+    glUniform4fv(defaultShader.getUniformLocation("projectionMatrix"), 1, glm::value_ptr(projectionMatrix));
     glClear( GL_COLOR_BUFFER_BIT );
 
     
