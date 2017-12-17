@@ -9,5 +9,6 @@ class Graphics
     Logic& logic;
 public:
     Graphics(Logic& logic);
+    void render();
 };
 #endif

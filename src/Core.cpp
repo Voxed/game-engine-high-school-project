@@ -90,6 +90,9 @@ int Core::start()
         {
             if( e.type == SDL_QUIT )
                 quit = true;
+
+            g.render();
+            SDL_GL_SwapWindow(window);
         }
 
         SDL_Delay(60/1000);
