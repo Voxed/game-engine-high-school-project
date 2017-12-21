@@ -16,6 +16,18 @@ Shader::Shader(GLuint programID)
     this->programID = programID;
 }
 
+void Shader::bindTexture(GLenum target, Texture texture)
+{
+    GLint programBak;
+    glGetIntegerv(GL_CURRENT_PROGRAM, &programBak);
+    bool use = (programBak != programID);
+
+    if (use) glUseProgram(programID);
+    glActiveTexture( target );
+    glBindTexture( GL_TEXTURE_2D, texture.getTextureID() );
+    if (use) glUseProgram(programBak);
+}
+
 GLint Shader::getUniformLocation(std::string s)
 {
     return glGetUniformLocation(programID, s.c_str());
@@ -33,9 +45,15 @@ GLuint Shader::getProgramID()
 
 void Shader::bindArrayBuffer(GLuint attribLocation, GLuint bufferObject, GLenum type, GLint size, GLsizei stride)
 {
+    GLint programBak;
+    glGetIntegerv(GL_CURRENT_PROGRAM, &programBak);
+    bool use = (programBak != programID);
+
+    if (use) glUseProgram(programID);
     glEnableVertexAttribArray(attribLocation);
     glBindBuffer(GL_ARRAY_BUFFER, bufferObject);
     glVertexAttribPointer(attribLocation, size, type, GL_FALSE, stride, NULL);
+    if (use) glUseProgram(programBak);
 }
 
 void Shader::use()

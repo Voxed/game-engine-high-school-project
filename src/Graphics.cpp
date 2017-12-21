@@ -39,14 +39,14 @@ void Graphics::render()
 {
     glClear( GL_COLOR_BUFFER_BIT );
 
-    defaultShader.use();
     glUniformMatrix4fv(defaultShader.getUniformLocation("projectionMatrix"), 1, GL_FALSE, glm::value_ptr(projectionMatrix));
     glUniform1i(defaultShader.getUniformLocation("tex"), 0);
+
     defaultShader.bindArrayBuffer(defaultShader.getAttribLocation("vertexPos"), vbo, GL_FLOAT, 2, 2 * sizeof(GLfloat));
     defaultShader.bindArrayBuffer(defaultShader.getAttribLocation("textureCoords"), tbo, GL_FLOAT, 2, 2 * sizeof(GLfloat));
+    defaultShader.bindTexture( GL_TEXTURE0, testTexture );
 
-    glActiveTexture( GL_TEXTURE0 );
-    glBindTexture(GL_TEXTURE_2D, testTexture.getTextureID());
+    defaultShader.use();
 
     glDrawArrays( GL_TRIANGLES, 0, 3 );
 }
