@@ -21,6 +21,8 @@ file(GLOB SOURCE_FILES
     ${PROJECT_SOURCE_DIR}/src/*.cpp
 )
 
+file(COPY ${PROJECT_SOURCE_DIR}/resources DESTINATION ${PROJECT_BINARY_DIR})
+
 add_executable(Game 
     ${SOURCE_FILES}
 )

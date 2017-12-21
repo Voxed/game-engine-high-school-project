@@ -31,6 +31,18 @@ GLuint Shader::getProgramID()
     return programID;
 }
 
+void Shader::bindArrayBuffer(GLuint attribLocation, GLuint bufferObject, GLenum type, GLint size, GLsizei stride)
+{
+    glEnableVertexAttribArray(attribLocation);
+    glBindBuffer(GL_ARRAY_BUFFER, bufferObject);
+    glVertexAttribPointer(attribLocation, size, type, GL_FALSE, stride, NULL);
+}
+
+void Shader::use()
+{
+    glUseProgram(programID);
+}
+
 bool Shader::isCompiled()
 {
     return compiled;
@@ -43,10 +55,11 @@ std::string Shader::getErrorString()
 
 Shader Shader::loadShaderFromFile(std::string path)
 {
+    std::string directory = "./resources/shaders/";
     std::string vertExtension = "vert";
     std::string fragExtension = "frag";
-    std::string vertexFileName = path + "." + vertExtension;
-    std::string fragmentFileName = path + "." + fragExtension;
+    std::string vertexFileName = directory + path + "." + vertExtension;
+    std::string fragmentFileName = directory + path + "." + fragExtension;
     std::string errStr;
     std::string vertexSrc;
     std::ifstream vertexFile((vertexFileName).c_str());

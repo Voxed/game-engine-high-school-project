@@ -74,6 +74,15 @@ int Core::initGL()
         printf( "Could not intialize GLEW!\nError: %s\n", glewGetErrorString(glewError));
         return -1;
     }
+
+    int flags = IMG_INIT_PNG;
+    int inittedFlags = IMG_Init( flags );
+    if( inittedFlags&flags != flags )
+    {
+        printf( "Could not initialize SDL-image!\nError: %s\n", IMG_GetError());
+        return -1;
+    }
+    return 0;
 }
 
 int Core::start()
@@ -90,10 +99,10 @@ int Core::start()
         {
             if( e.type == SDL_QUIT )
                 quit = true;
-
-            g.render();
-            SDL_GL_SwapWindow(window);
         }
+
+        g.render();
+        SDL_GL_SwapWindow(window);
 
         SDL_Delay(60/1000);
     }

@@ -15,6 +15,8 @@ public:
     Shader(std::string errStr);
     Shader(GLuint programID);
     Shader();
+    void bindArrayBuffer(GLuint attribLocation, GLuint bufferObject, GLenum type, GLint size, GLsizei stride);
+    void use();
     GLint getUniformLocation(std::string);
     GLint getAttribLocation(std::string);
     GLuint getProgramID();

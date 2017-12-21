@@ -7,13 +7,17 @@
 
 #include "Logic.h"
 #include "Shader.h"
+#include "Texture.h"
 
 class Graphics
 {
     Logic& logic;
 
     glm::mat4 projectionMatrix;
+    GLuint vbo;
+    GLuint tbo;
     Shader defaultShader;
+    Texture testTexture;
 public:
     Graphics(Logic& logic);
     void render();
