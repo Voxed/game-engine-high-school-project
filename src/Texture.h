@@ -8,9 +8,13 @@
 class Texture
 {
     GLuint textureID;
+    int width;
+    int height;
 public:
     Texture();
     Texture(std::string filePath);  
     GLuint getTextureID();  
+    int getWidth();
+    int getHeight();
 };
 #endif
