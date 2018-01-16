@@ -95,6 +95,7 @@ int Core::start()
     bool quit = false;
     SDL_Event e;
     std::vector<int> held_keys = std::vector<int>();
+    std::vector<int> held_mousebuttons = std::vector<int>();
     while( !quit )
     {
         while( SDL_PollEvent(&e) )
@@ -127,6 +128,26 @@ int Core::start()
                     }
                     held_keys.erase(std::remove(held_keys.begin(), held_keys.end(), e.key.keysym.sym), held_keys.end()); 
                     break;
+                case SDL_MOUSEBUTTONDOWN:
+                    for(auto const& action : Mouse::getActions(e.button.button))
+                    {
+                        Action a; 
+                        a.type = ActionType::MOUSE;
+                        a.state = ActionState::PRESSED;
+                        Actions::call(a);
+                    }
+                    held_mousebuttons.push_back(e.button.button);
+                    break;
+                case SDL_MOUSEBUTTONUP:
+                    for(auto const& action : Mouse::getActions(e.button.button))
+                    {
+                        Action a; 
+                        a.type = ActionType::MOUSE;
+                        a.state = ActionState::RELEASED;
+                        Actions::call(a);
+                    }
+                    held_mousebuttons.erase(std::remove(held_mousebuttons.begin(), held_mousebuttons.end(), e.button.button), held_mousebuttons.end()); 
+                    break;
             }
         }
         for(auto key : held_keys)
@@ -136,6 +157,16 @@ int Core::start()
                 Action a;
                 a.action = action;
                 a.type = ActionType::KEYBOARD;
+                a.state = ActionState::HELD;
+                Actions::call(a);
+            }
+        }
+        for(auto mouse : held_mousebuttons)
+        {
+            for(auto const& action : Mouse::getActions(e.button.button))
+            {
+                Action a; 
+                a.type = ActionType::MOUSE;
                 a.state = ActionState::HELD;
                 Actions::call(a);
             }

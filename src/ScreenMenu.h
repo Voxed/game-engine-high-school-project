@@ -3,13 +3,15 @@
 
 #include "Engine.h"
 
-class ScreenMenu : public Screen
+class ScreenMenu : public Screen, public ActionListener
 {
-
+    
 public:
     ScreenMenu();
     void render(SpriteBatch& batch);
     void update(float delta);
+
+    void onAction(Action action);
 };
 
 #endif

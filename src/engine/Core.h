@@ -11,6 +11,7 @@
 #include "Graphics.h"
 #include "Keyboard.h"
 #include "Actions.h"
+#include "Mouse.h"
 
 class Screen;
 class Core
@@ -34,6 +35,5 @@ public:
 };
 
 #include "Screen.h"
-
 
 #endif
