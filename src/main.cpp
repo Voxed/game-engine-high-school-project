@@ -1,25 +1,11 @@
-#include "Core.h"
-
-class App
-{
-    Core c;
-public:
-    int run() 
-    {
-        c.start();
-    };
-    bool hasError()
-    {
-        return c.hasError();
-    };
-};
+#include "Game.h"
 
 int main()
 {
-    App app;
-    if( !app.hasError() )
+    Game game;
+    if( !game.hasError() )
     {
-        return app.run();
+        return game.run();
     }
     return -1;
 }

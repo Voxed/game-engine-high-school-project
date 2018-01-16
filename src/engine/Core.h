@@ -3,9 +3,16 @@
 #include <SDL2/SDL.h>
 #include <GL/glew.h>
 #include <SDL2/SDL_image.h>
+#include <vector>
+#include <string>
+#include <algorithm>
 
+#include "Logic.h"
 #include "Graphics.h"
+#include "Keyboard.h"
+#include "Actions.h"
 
+class Screen;
 class Core
 {
     SDL_Window * window;
@@ -14,10 +21,19 @@ class Core
     int initWindow();
     int initGL();
     bool error;
+    Screen * scr;
+    bool started = false;
 public:
     Core();
     ~Core();
     bool hasError();
+    bool hasStarted();
     int start();
+    void setScreen(Screen * scr);
+    Screen * getScreen();
 };
+
+#include "Screen.h"
+
+
 #endif

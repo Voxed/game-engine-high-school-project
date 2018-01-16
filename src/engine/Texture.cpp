@@ -35,3 +35,9 @@ int Texture::getWidth()
 {
     return width;
 }
+
+void Texture::bind(GLenum target)
+{
+    glActiveTexture( target );
+    glBindTexture( GL_TEXTURE_2D, getTextureID() );
+}

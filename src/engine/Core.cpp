@@ -87,23 +87,80 @@ int Core::initGL()
 
 int Core::start()
 {
-    Logic l = Logic();
-    Graphics g = Graphics(l);
+    Logic l = Logic(this);
+    Graphics g = Graphics(this, l);
+    started = true;
 
     //Main loop :)
     bool quit = false;
     SDL_Event e;
+    std::vector<int> held_keys = std::vector<int>();
     while( !quit )
     {
         while( SDL_PollEvent(&e) )
         {
-            if( e.type == SDL_QUIT )
-                quit = true;
+            switch( e.type ) {
+                case SDL_QUIT:
+                    quit = true;
+                    break;
+                case SDL_KEYDOWN:
+                    if(std::find(held_keys.begin(), held_keys.end(), e.key.keysym.sym) == held_keys.end())
+                    {
+                        for(auto const& action : Keyboard::getActions(e.key.keysym.sym))
+                        {
+                            Action a;
+                            a.action = action;
+                            a.type = ActionType::KEYBOARD;
+                            a.state = ActionState::PRESSED;
+                            Actions::call(a);
+                        }
+                        held_keys.push_back(e.key.keysym.sym);
+                    }
+                    break;
+                case SDL_KEYUP:
+                    for(auto const& action : Keyboard::getActions(e.key.keysym.sym))
+                    {
+                        Action a; 
+                        a.type = ActionType::KEYBOARD;
+                        a.state = ActionState::RELEASED;
+                        Actions::call(a);
+                    }
+                    held_keys.erase(std::remove(held_keys.begin(), held_keys.end(), e.key.keysym.sym), held_keys.end()); 
+                    break;
+            }
+        }
+        for(auto key : held_keys)
+        {   
+            for(auto const& action : Keyboard::getActions(key))
+            {
+                Action a;
+                a.action = action;
+                a.type = ActionType::KEYBOARD;
+                a.state = ActionState::HELD;
+                Actions::call(a);
+            }
         }
 
         g.render();
+        l.update(1.0f);
         SDL_GL_SwapWindow(window);
 
         SDL_Delay(60/1000);
     }
+}
+
+void Core::setScreen(Screen * scr)
+{
+    scr->core = this;
+    this->scr = scr;
+}
+
+Screen * Core::getScreen()
+{
+    return scr;
+}
+
+bool Core::hasStarted()
+{
+    return started;
 }

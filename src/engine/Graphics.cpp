@@ -1,28 +1,22 @@
 #include "Graphics.h"
-Graphics::Graphics(Logic& logic) : logic(logic)
+Graphics::Graphics(Core * core, Logic& logic) : logic(logic)
 {
-    glClearColor( 0.0,1.0,0.5, 1.0 );
+    Color c = core->getScreen()->getBackgroundColor();
+    glClearColor( c.r, c.g, c.b, c.a );
+    glEnable( GL_TEXTURE_2D );
     glEnable( GL_DEPTH_TEST );
 
-    defaultShader = Shader::loadShaderFromFile("default");
-    if( !defaultShader.isCompiled() )
-    {
-        printf("%s", defaultShader.getErrorString().c_str());
-    }
-    projectionMatrix = glm::ortho(0.0f, 640.0f, 0.0f, 480.0f, -1.0f, 1.0f);
+    projectionMatrix = glm::ortho(0.0f, 640.0f, 0.0f, 480.0f, 1.0f, -1.0f);
 
-    testTexture = Texture("./resources/textures/lol.png");
-
-    batch.draw(Sprite(&testTexture, &defaultShader, 12, 10, 0.0f, 1.0f, 1.0f));
-    batch.draw(Sprite(&testTexture, &defaultShader, 13, 10, 0.0f, 1.0f, 1.0f));
-    batch.draw(Sprite(&testTexture, &defaultShader, 10, 10, 0.0f, 1.0f, 1.0f));
-    batch.draw(Sprite(&testTexture, &defaultShader, 20, -15, -0.5f, 10.0f, 10.0f));
+    this->core = core;
 }
 
 
 
 void Graphics::render()
 {
+    core->getScreen()->render(batch);
+
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
     std::vector<GLfloat> vertices;
@@ -31,17 +25,18 @@ void Graphics::render()
 
     struct DrawRange
     {
-        int elements;
-        Texture* texture;
-        Shader* shader;
+        int elements = 0;
+        Texture* texture = 0;
+        Shader* shader = 0;
+        bool transparent = false;
     };
-    std::map<Shader*, std::map<Texture*, std::vector<Sprite*>>> orderedSpriteList = batch.getOrdererdSprites();
+    std::map<Shader*, std::map<Texture*, std::vector<Sprite*>>> opaqueSprites = batch.getOpaqueSprites();
     std::vector<DrawRange> ranges;
     Shader* last_shader = 0;
     Texture* last_texture = 0;
 
-
-    for(auto &e: orderedSpriteList) //Loop through all shader changes
+    //Generate draw data :)
+    for(auto &e: opaqueSprites) //Loop through all shader changes
     {
         Shader* curr_shader = e.first;
         for(auto &e2: e.second) //Loop through all texture changes for shader change
@@ -49,8 +44,6 @@ void Graphics::render()
             Texture* curr_texture = e2.first; 
 
             DrawRange dr = DrawRange(); //Create a clean drawrange
-            dr.texture = 0; //Set texturechange to null, meaning the range doesnt need a new texture
-            dr.shader = 0; //Set shaderchange to null, meaning the range doesnt need a new shader
             if(e.first != last_shader) //Wait, does it need a shaderchange?
             {
                 dr.shader = e.first; //Oh shit! It does.
@@ -108,6 +101,49 @@ void Graphics::render()
         }
     }
 
+    std::vector<Sprite*> transparentSprites = batch.getTransparentSprites();
+
+    //Generate transparent draw data, these sprites are less effective but required for showing partial transparency.
+    for(auto &sprite: transparentSprites)
+    {
+        DrawRange dr;
+        dr.elements = 1;
+        dr.texture = sprite->getTexture();
+        dr.transparent = true;
+        dr.shader = sprite->getShader();
+        //Apply sprites to indices/vertices/texcoords
+        uint vertices_offset = vertices.size()/3;
+        int x = sprite->x;
+        int y = sprite->y;
+        float z = sprite->z;
+        float scaleX = sprite->scaleX;
+        float scaleY = sprite->scaleY;
+        int texWidth = sprite->getTexture()->getWidth();
+        int texHeight = sprite->getTexture()->getHeight();
+        for(uint i = 0; i < sizeof(Sprite::VERTICES)/sizeof(Sprite::VERTICES[0]); i+=2)
+        {
+            float vertX = Sprite::VERTICES[i];
+            float vertY = Sprite::VERTICES[i+1];
+            vertices.push_back(vertX*texWidth*scaleX+x);
+            vertices.push_back(vertY*texHeight*scaleY+y);
+            vertices.push_back(z);
+        }
+        for(uint i = 0; i < sizeof(Sprite::TEX_COORDS)/sizeof(Sprite::TEX_COORDS[0]); i+=2)
+        {
+            float coordX = Sprite::TEX_COORDS[i];
+            float coordY = Sprite::TEX_COORDS[i+1];
+            texCoords.push_back(coordX);
+            texCoords.push_back(coordY);
+        }
+        for(uint i = 0; i < sizeof(Sprite::INDICES)/sizeof(Sprite::INDICES[0]); i+=2)
+        {
+            uint indexX = Sprite::INDICES[i];
+            uint indexY = Sprite::INDICES[i+1];
+            indices.push_back(vertices_offset + indexX);
+            indices.push_back(vertices_offset + indexY);
+        }
+        ranges.push_back(dr);
+    }
 
     GLuint vbo = -1;
     glGenBuffers(1, &vbo);
@@ -124,15 +160,37 @@ void Graphics::render()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
 
-    //Fake test lol
-    glUniformMatrix4fv(defaultShader.getUniformLocation("projectionMatrix"), 1, GL_FALSE, glm::value_ptr(projectionMatrix));
-    glUniform1i(defaultShader.getUniformLocation("tex"), 0);
+    uint offset = 0;
+    for(auto &range: ranges)
+    {
+        if(range.transparent) 
+        {
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        }
+        if(range.texture)
+        {
+            range.texture->bind(GL_TEXTURE0);
+        }
+        if(range.shader)
+        {
+            glUniformMatrix4fv(range.shader->getUniformLocation("projectionMatrix"), 1, GL_FALSE, glm::value_ptr(projectionMatrix));
+            glUniform1i(range.shader->getUniformLocation("tex"), 0);
 
-    defaultShader.bindArrayBuffer(defaultShader.getAttribLocation("vertexPos"), vbo, GL_FLOAT, 3, 3 * sizeof(GLfloat));
-    defaultShader.bindArrayBuffer(defaultShader.getAttribLocation("textureCoords"), tbo, GL_FLOAT, 2, 2 * sizeof(GLfloat));
-    defaultShader.bindTexture( GL_TEXTURE0, testTexture );
+            range.shader->bindArrayBuffer(range.shader->getAttribLocation("vertexPos"), vbo, GL_FLOAT, 3, 3 * sizeof(GLfloat));
+            range.shader->bindArrayBuffer(range.shader->getAttribLocation("textureCoords"), tbo, GL_FLOAT, 2, 2 * sizeof(GLfloat));
+            
+            range.shader->use();
+        }
+        
+        glDrawElements( GL_TRIANGLES, 6 * range.elements, GL_UNSIGNED_INT, (void*) (offset*sizeof(GLuint)));
+        offset += 6 * range.elements;
 
-    defaultShader.use();
+        if(range.transparent)
+        {
+            glDisable(GL_BLEND);
+        }
+    }
 
-    glDrawElements( GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+    batch.clear();
 }

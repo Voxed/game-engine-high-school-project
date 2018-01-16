@@ -19,8 +19,9 @@ public:
     const float z;
     const float scaleX;
     const float scaleY;
-
-    Sprite(Texture *texture, Shader *shader, int x, int y, float depth, float scaleX, float scaleY);
+    const bool usePartialTransparency;
+    
+    Sprite(Texture *texture, Shader *shader, int x, int y, float depth = 0.0f, float scaleX = 1.0f, float scaleY = 1.0f, bool usePartialTransparency = false);
     void render(std::vector<Sprite*> sprites);
 
     Texture* getTexture();

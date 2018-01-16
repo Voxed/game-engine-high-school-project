@@ -10,11 +10,13 @@ class Texture
     GLuint textureID;
     int width;
     int height;
+    bool partialTransparency;
 public:
     Texture();
     Texture(std::string filePath);  
     GLuint getTextureID();  
     int getWidth();
     int getHeight();
+    void bind(GLenum target);
 };
 #endif

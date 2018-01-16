@@ -5,8 +5,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <array>
-
 #include "Logic.h"
 #include "Shader.h"
 #include "Texture.h"
@@ -14,18 +12,20 @@
 #include "SpriteBatch.h"
 #include "Sprite.h"
 
+#include "Core.h"
+
+class Core;
+class Logic;
 class Graphics
 {
     Logic& logic;
 
     glm::mat4 projectionMatrix;
-    Shader defaultShader;
-    Texture testTexture;
-    Texture testTexture2;
-
+    
     SpriteBatch batch;
+    Core * core;
 public:
-    Graphics(Logic& logic);
+    Graphics(Core * c, Logic& logic);
     void render();
 };
 #endif

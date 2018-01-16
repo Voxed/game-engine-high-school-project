@@ -17,8 +17,8 @@ GLfloat Sprite::INDICES[6] = {
     2,0,3
 };
 
-Sprite::Sprite(Texture *texture, Shader *shader, int x, int y, float depth, float scaleX, float scaleY) :
-    x (x), y (y), texture( texture ), scaleX( scaleX ), scaleY( scaleY ), shader( shader ), z( depth )
+Sprite::Sprite(Texture *texture, Shader *shader, int x, int y, float depth, float scaleX, float scaleY, bool usePartialTransparency) :
+    x (x), y (y), texture( texture ), scaleX( scaleX ), scaleY( scaleY ), shader( shader ), z( depth ), usePartialTransparency( usePartialTransparency )
 {
 
 }

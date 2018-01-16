@@ -19,6 +19,7 @@ include_directories(
 
 file(GLOB SOURCE_FILES
     ${PROJECT_SOURCE_DIR}/src/*.cpp
+    ${PROJECT_SOURCE_DIR}/src/engine/*.cpp
 )
 
 file(COPY ${PROJECT_SOURCE_DIR}/resources DESTINATION ${PROJECT_BINARY_DIR})
