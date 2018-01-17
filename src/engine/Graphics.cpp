@@ -6,7 +6,7 @@ Graphics::Graphics(Core * core, Logic& logic) : logic(logic)
     glEnable( GL_TEXTURE_2D );
     glEnable( GL_DEPTH_TEST );
 
-    projectionMatrix = glm::ortho(0.0f, 640.0f, 480.0f, 0.0f, 1.0f, -1.0f);
+    projectionMatrix = glm::ortho(0.0f, (float)core->getWidth(), (float)core->getHeight(), 0.0f, 1.0f, -1.0f);
 
     this->core = core;
 }

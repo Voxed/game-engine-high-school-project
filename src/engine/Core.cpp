@@ -47,8 +47,8 @@ int Core::initWindow()
         "Title",
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
-        640,
-        480,
+        1920,
+        1080,
         SDL_WINDOW_OPENGL
     );
     if( window == NULL )
@@ -179,7 +179,7 @@ int Core::start()
         }
         
         g.render();
-        
+
         float lastRenderDelta = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - lastRenderTime).count()/(float)1000000000;
         fps = 1/lastRenderDelta;
         lastRenderTime = std::chrono::high_resolution_clock::now();
@@ -211,4 +211,18 @@ bool Core::hasStarted()
 int Core::getFPS()
 {
     return fps;
+}
+
+int Core::getWidth()
+{
+    int w;
+    SDL_GetWindowSize(window, &w, NULL);
+    return w;
+}
+
+int Core::getHeight()
+{
+    int h;
+    SDL_GetWindowSize(window, NULL, &h);
+    return h;
 }

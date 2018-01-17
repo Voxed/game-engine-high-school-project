@@ -36,6 +36,8 @@ public:
     void setScreen(Screen * scr);
     Screen * getScreen();
     int getFPS();
+    int getWidth();
+    int getHeight();
 };
 
 #include "Screen.h"
