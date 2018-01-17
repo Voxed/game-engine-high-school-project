@@ -1,5 +1,10 @@
 #include "SpriteFont.h"
 
+SpriteFont::SpriteFont() 
+{
+
+}
+
 SpriteFont::SpriteFont(Texture* t, std::string c, int cw, int ch, int ls)
 {
     font_texture = t;
@@ -12,7 +17,7 @@ SpriteFont::SpriteFont(Texture* t, std::string c, int cw, int ch, int ls)
 std::vector<Sprite> SpriteFont::getSprites(std::string text, int x, int y, Shader * shader, float depth, float scale)
 {
     std::vector<Sprite> sprites;
-    for(int i; i < text.size(); i++)
+    for(int i = 0; i < text.size(); i++)
     {
         char c = text.at(i);
         if(c != ' ')
@@ -29,5 +34,6 @@ std::vector<Sprite> SpriteFont::getSprites(std::string text, int x, int y, Shade
             sprites.push_back(Sprite(font_texture, shader, x + offset, y, subX, subY, subW, subH, depth, scale, scale));
         }
     }
+
     return sprites;
 }

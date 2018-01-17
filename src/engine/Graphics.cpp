@@ -15,9 +15,9 @@ Graphics::Graphics(Core * core, Logic& logic) : logic(logic)
 
 void Graphics::render()
 {
-    core->getScreen()->render(batch);
-
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+    core->getScreen()->render(batch);
 
     std::vector<GLfloat> vertices;
     std::vector<GLuint> indices;
@@ -131,25 +131,36 @@ void Graphics::render()
         float scaleY = sprite->scaleY;
         int texWidth = sprite->getTexture()->getWidth();
         int texHeight = sprite->getTexture()->getHeight();
-        for(uint i = 0; i < sizeof(Sprite::VERTICES)/sizeof(Sprite::VERTICES[0]); i+=2)
+        float subW = sprite->subW;
+        float subH = sprite->subH;
+
+
+        std::vector<GLfloat> vert;
+        std::vector<GLuint> ind;
+        std::vector<GLfloat> tc;
+
+        sprite->getData(vert,tc,ind);
+
+
+        for(uint i = 0; i < vert.size(); i+=2)
         {
-            float vertX = Sprite::VERTICES[i];
-            float vertY = Sprite::VERTICES[i+1];
-            vertices.push_back(vertX*texWidth*scaleX+x);
-            vertices.push_back(vertY*texHeight*scaleY+y);
+            float vertX = vert[i];
+            float vertY = vert[i+1];
+            vertices.push_back(vertX*texWidth*scaleX*subW+x);
+            vertices.push_back(vertY*texHeight*scaleY*subH+y);
             vertices.push_back(z);
         }
-        for(uint i = 0; i < sizeof(Sprite::TEX_COORDS)/sizeof(Sprite::TEX_COORDS[0]); i+=2)
+        for(uint i = 0; i < tc.size(); i+=2)
         {
-            float coordX = Sprite::TEX_COORDS[i];
-            float coordY = Sprite::TEX_COORDS[i+1];
+            float coordX = tc[i];
+            float coordY = tc[i+1];
             texCoords.push_back(coordX);
             texCoords.push_back(coordY);
         }
-        for(uint i = 0; i < sizeof(Sprite::INDICES)/sizeof(Sprite::INDICES[0]); i+=2)
+        for(uint i = 0; i < ind.size(); i+=2)
         {
-            uint indexX = Sprite::INDICES[i];
-            uint indexY = Sprite::INDICES[i+1];
+            uint indexX = ind[i];
+            uint indexY = ind[i+1];
             indices.push_back(vertices_offset + indexX);
             indices.push_back(vertices_offset + indexY);
         }
@@ -195,6 +206,7 @@ void Graphics::render()
 
         }
         
+
         glDrawElements( GL_TRIANGLES, 6 * range.elements, GL_UNSIGNED_INT, (void*) (offset*sizeof(GLuint)));
         offset += 6 * range.elements;
 

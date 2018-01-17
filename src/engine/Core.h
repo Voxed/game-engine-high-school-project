@@ -6,12 +6,14 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <chrono>
 
 #include "Logic.h"
 #include "Graphics.h"
 #include "Keyboard.h"
 #include "Actions.h"
 #include "Mouse.h"
+
 
 class Screen;
 class Core
@@ -24,6 +26,7 @@ class Core
     bool error;
     Screen * scr;
     bool started = false;
+    int fps;
 public:
     Core();
     ~Core();
@@ -32,6 +35,7 @@ public:
     int start();
     void setScreen(Screen * scr);
     Screen * getScreen();
+    int getFPS();
 };
 
 #include "Screen.h"

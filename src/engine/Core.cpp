@@ -82,6 +82,9 @@ int Core::initGL()
         printf( "Could not initialize SDL-image!\nError: %s\n", IMG_GetError());
         return -1;
     }
+
+    //SDL_GL_SetSwapInterval(0);
+
     return 0;
 }
 
@@ -96,6 +99,8 @@ int Core::start()
     SDL_Event e;
     std::vector<int> held_keys = std::vector<int>();
     std::vector<int> held_mousebuttons = std::vector<int>();
+    std::chrono::high_resolution_clock::time_point lastRenderTime = std::chrono::high_resolution_clock::now();
+    std::chrono::high_resolution_clock::time_point lastUpdateTime = std::chrono::high_resolution_clock::now();
     while( !quit )
     {
         while( SDL_PollEvent(&e) )
@@ -120,7 +125,8 @@ int Core::start()
                     break;
                 case SDL_KEYUP:
                     for(auto const& action : Keyboard::getActions(e.key.keysym.sym))
-                    {
+                    {    printf("%i\n", fps);
+
                         Action a; 
                         a.type = ActionType::KEYBOARD;
                         a.state = ActionState::RELEASED;
@@ -171,12 +177,18 @@ int Core::start()
                 Actions::call(a);
             }
         }
-
+        
         g.render();
-        l.update(1.0f);
-        SDL_GL_SwapWindow(window);
+        
+        float lastRenderDelta = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - lastRenderTime).count()/(float)1000000000;
+        fps = 1/lastRenderDelta;
+        lastRenderTime = std::chrono::high_resolution_clock::now();
 
-        SDL_Delay(60/1000);
+        float lastUpdateDelta = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - lastUpdateTime).count()/(float)1000000000;
+        l.update(lastUpdateDelta);
+        lastUpdateTime = std::chrono::high_resolution_clock::now();
+
+        SDL_GL_SwapWindow(window);
     }
 }
 
@@ -194,4 +206,9 @@ Screen * Core::getScreen()
 bool Core::hasStarted()
 {
     return started;
+}
+
+int Core::getFPS()
+{
+    return fps;
 }
