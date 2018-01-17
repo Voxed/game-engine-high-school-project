@@ -12,7 +12,6 @@ bool Game::hasError()
 
 int Game::run()
 {
-    ScreenMenu menu;
     core.setScreen(&menu);
     return core.start();
 }

@@ -7,6 +7,7 @@
 class Game
 {
     Core core;
+    ScreenMenu menu;
 public:
     Game();
     bool hasError();

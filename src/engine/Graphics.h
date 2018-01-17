@@ -18,6 +18,9 @@ class Core;
 class Logic;
 class Graphics
 {
+    Texture text;
+    Shader shad;
+
     Logic& logic;
 
     glm::mat4 projectionMatrix;

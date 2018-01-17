@@ -10,9 +10,9 @@ class Sprite
     Texture *texture;
     Shader *shader;
 public:
-    static GLfloat VERTICES[8];
-    static GLfloat INDICES[6];
-    static GLfloat TEX_COORDS[8];
+    static std::vector<GLfloat> VERTICES;
+    static std::vector<GLuint> INDICES;
+    static std::vector<GLfloat> TEX_COORDS;
 
     const int x;
     const int y;
@@ -20,9 +20,14 @@ public:
     const float scaleX;
     const float scaleY;
     const bool usePartialTransparency;
+    const float subX, subY, subW, subH;
+    const bool useSubTexture;
     
     Sprite(Texture *texture, Shader *shader, int x, int y, float depth = 0.0f, float scaleX = 1.0f, float scaleY = 1.0f, bool usePartialTransparency = false);
+    Sprite(Texture *texture, Shader *shader, int x, int y, float subX, float subY, float subW, float subH, float depth = 0.0f, float scaleX = 1.0f, float scaleY = 1.0f, bool usePartialTransparency = false);
     void render(std::vector<Sprite*> sprites);
+
+    void getData(std::vector<GLfloat>& vertices, std::vector<GLfloat>& texCoords, std::vector<GLuint>& indices);
 
     Texture* getTexture();
     Shader* getShader();
