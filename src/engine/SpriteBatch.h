@@ -14,6 +14,7 @@ public:
     std::map<Shader*, std::map<Texture*, std::vector<Sprite*>>> getOpaqueSprites();
     std::vector<Sprite*> getTransparentSprites();
     void draw(Sprite s);
+    void draw(std::vector<Sprite> s);
     void clear();
 };
 #endif

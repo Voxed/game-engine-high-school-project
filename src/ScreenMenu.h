@@ -6,6 +6,7 @@
 class ScreenMenu : public Screen, public ActionListener
 {
     Texture text;
+    Texture font;
     Shader shad;
 public:
     ScreenMenu();

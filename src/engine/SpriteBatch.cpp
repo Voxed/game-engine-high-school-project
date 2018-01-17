@@ -5,6 +5,14 @@ void SpriteBatch::draw(Sprite sprite)
     sprites.push_back(sprite);
 }
 
+void SpriteBatch::draw(std::vector<Sprite> sprites)
+{
+    for(auto sprite : sprites)
+    {
+        draw(sprite);
+    }
+}
+
 std::map<Shader*, std::map<Texture*, std::vector<Sprite*>>> SpriteBatch::getOpaqueSprites()
 {
 
