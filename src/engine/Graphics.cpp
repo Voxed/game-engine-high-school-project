@@ -35,6 +35,7 @@ void Graphics::render()
     Shader* last_shader = 0;
     Texture* last_texture = 0;
 
+
     //Generate draw data :)
     for(auto &e: opaqueSprites) //Loop through all shader changes
     {
@@ -58,59 +59,26 @@ void Graphics::render()
                 dr.elements += 1;
                 //Apply sprites to indices/vertices/texcoords
                 uint vertices_offset = vertices.size()/3;
-                int x = sprite->x;
-                int y = sprite->y;
-                float z = sprite->z;
-                float scaleX = sprite->scaleX;
-                float scaleY = sprite->scaleY;
-                float subW = sprite->subW;
-                float subH = sprite->subH;
-                int texWidth = sprite->getTexture()->getWidth();
-                int texHeight = sprite->getTexture()->getHeight();
-
 
                 std::vector<GLfloat> vert;
                 std::vector<GLuint> ind;
                 std::vector<GLfloat> tc;
 
-                sprite->getData(vert,tc,ind);
-
-
-                for(uint i = 0; i < vert.size(); i+=2)
-                {
-                    float vertX = vert[i];
-                    float vertY = vert[i+1];
-                    vertices.push_back(vertX*texWidth*scaleX*subW+x);
-                    vertices.push_back(vertY*texHeight*scaleY*subH+y);
-                    vertices.push_back(z);
-                }
-                for(uint i = 0; i < tc.size(); i+=2)
-                {
-                    float coordX = tc[i];
-                    float coordY = tc[i+1];
-                    texCoords.push_back(coordX);
-                    texCoords.push_back(coordY);
-                }
-                for(uint i = 0; i < ind.size(); i+=2)
-                {
-                    uint indexX = ind[i];
-                    uint indexY = ind[i+1];
-                    indices.push_back(vertices_offset + indexX);
-                    indices.push_back(vertices_offset + indexY);
-                }
-
-
+                sprite->getData(vert,tc,ind, vertices_offset);
+                vertices.insert(vertices.end(), vert.begin(), vert.end());      
+                indices.insert(indices.end(), ind.begin(), ind.end());             
+                texCoords.insert(texCoords.end(), tc.begin(), tc.end());  
             }
-            ranges.push_back(dr); //Drawrange complete!
-
-            //printf("Range completed, length: %u with directives:\n", dr.elements);
-            //if(dr.texture != 0) printf("change texture\n");
-            //if(dr.shader != 0) printf("change shader\n");
+            ranges.push_back(dr);
 
             last_texture = e2.first;
             last_shader = e.first;
+            
         }
     }
+
+
+
 
     std::vector<Sprite*> transparentSprites = batch.getTransparentSprites();
 
@@ -124,48 +92,18 @@ void Graphics::render()
         dr.shader = sprite->getShader();
         //Apply sprites to indices/vertices/texcoords
         uint vertices_offset = vertices.size()/3;
-        int x = sprite->x;
-        int y = sprite->y;
-        float z = sprite->z;
-        float scaleX = sprite->scaleX;
-        float scaleY = sprite->scaleY;
-        int texWidth = sprite->getTexture()->getWidth();
-        int texHeight = sprite->getTexture()->getHeight();
-        float subW = sprite->subW;
-        float subH = sprite->subH;
-
 
         std::vector<GLfloat> vert;
         std::vector<GLuint> ind;
         std::vector<GLfloat> tc;
 
-        sprite->getData(vert,tc,ind);
-
-
-        for(uint i = 0; i < vert.size(); i+=2)
-        {
-            float vertX = vert[i];
-            float vertY = vert[i+1];
-            vertices.push_back(vertX*texWidth*scaleX*subW+x);
-            vertices.push_back(vertY*texHeight*scaleY*subH+y);
-            vertices.push_back(z);
-        }
-        for(uint i = 0; i < tc.size(); i+=2)
-        {
-            float coordX = tc[i];
-            float coordY = tc[i+1];
-            texCoords.push_back(coordX);
-            texCoords.push_back(coordY);
-        }
-        for(uint i = 0; i < ind.size(); i+=2)
-        {
-            uint indexX = ind[i];
-            uint indexY = ind[i+1];
-            indices.push_back(vertices_offset + indexX);
-            indices.push_back(vertices_offset + indexY);
-        }
+        sprite->getData(vert,tc,ind, vertices_offset);
+        vertices.insert(vertices.end(), vert.begin(), vert.end());      
+        indices.insert(indices.end(), ind.begin(), ind.end());             
+        texCoords.insert(texCoords.end(), tc.begin(), tc.end());    
         ranges.push_back(dr);
     }
+
 
     GLuint vbo = -1;
     glGenBuffers(1, &vbo);

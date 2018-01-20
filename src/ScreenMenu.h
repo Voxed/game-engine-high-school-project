@@ -4,6 +4,7 @@
 #include "Engine.h"
 
 #include <sstream>
+#include <tgmath.h>
 
 class ScreenMenu : public Screen, public ActionListener
 {

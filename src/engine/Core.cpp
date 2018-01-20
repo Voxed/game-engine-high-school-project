@@ -83,8 +83,6 @@ int Core::initGL()
         return -1;
     }
 
-    //SDL_GL_SetSwapInterval(0);
-
     return 0;
 }
 

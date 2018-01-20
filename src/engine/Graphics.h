@@ -14,6 +14,9 @@
 
 #include "Core.h"
 
+#include <chrono>
+#include <iterator>
+
 class Core;
 class Logic;
 class Graphics

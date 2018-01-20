@@ -40,21 +40,24 @@ Shader* Sprite::getShader()
     return shader;
 }
 
-void Sprite::getData(std::vector<GLfloat>& vertices, std::vector<GLfloat>& texCoords, std::vector<GLuint>& indices)
+void Sprite::getData(std::vector<GLfloat>& vertices, std::vector<GLfloat>& texCoords, std::vector<GLuint>& indices, unsigned int offset)
 {
-    vertices = Sprite::VERTICES;
-    if( useSubTexture )
-    {
-        texCoords = {
-            subX        , subY + subH,
-            subX        , subY,
-            subX + subW, subY,
-            subX + subW, subY + subH
-        };
-    }
-    else
-    {
-        texCoords = Sprite::TEX_COORDS;
-    }
-    indices = Sprite::INDICES;
+    int texWidth = texture->getWidth();
+    int texHeight = texture->getHeight();
+    vertices = {
+        (float)x,               texHeight*scaleY*subH+y, z,
+        (float)x,               (float)y,                z,
+        texWidth*scaleX*subW+x, (float)y,                z,
+        texWidth*scaleX*subW+x, texHeight*scaleY*subH+y, z
+    };
+    texCoords = {
+        subX        , subY + subH,
+        subX        , subY,
+        subX + subW, subY,
+        subX + subW, subY + subH
+    };
+    indices = {
+        0+offset,1+offset,2+offset,
+        2+offset,0+offset,3+offset
+    };
 }

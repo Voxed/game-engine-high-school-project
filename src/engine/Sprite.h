@@ -27,7 +27,7 @@ public:
     Sprite(Texture *texture, Shader *shader, int x, int y, float subX, float subY, float subW, float subH, float depth = 0.0f, float scaleX = 1.0f, float scaleY = 1.0f, bool usePartialTransparency = false);
     void render(std::vector<Sprite*> sprites);
 
-    void getData(std::vector<GLfloat>& vertices, std::vector<GLfloat>& texCoords, std::vector<GLuint>& indices);
+    void getData(std::vector<GLfloat>& vertices, std::vector<GLfloat>& texCoords, std::vector<GLuint>& indices, unsigned int offset);
 
     Texture* getTexture();
     Shader* getShader();
