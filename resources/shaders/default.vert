@@ -1,7 +1,9 @@
+#version 130
+
 uniform mat4 projectionMatrix;
-attribute vec3 vertexPos;
-attribute vec2 textureCoords;
-varying vec2 texCoords;
+in vec3 vertexPos;
+in vec2 textureCoords;
+out vec2 texCoords;
 
 void main()
 {

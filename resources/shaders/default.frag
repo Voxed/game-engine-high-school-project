@@ -1,5 +1,7 @@
+#version 130
+
 uniform sampler2D tex;
-varying vec2 texCoords;
+in vec2 texCoords;
 
 void main()
 {

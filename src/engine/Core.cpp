@@ -47,8 +47,8 @@ int Core::initWindow()
         "Title",
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
-        1920,
-        1080,
+        720,
+        480,
         SDL_WINDOW_OPENGL
     );
     if( window == NULL )
@@ -97,10 +97,13 @@ int Core::start()
     SDL_Event e;
     std::vector<int> held_keys = std::vector<int>();
     std::vector<int> held_mousebuttons = std::vector<int>();
-    std::chrono::high_resolution_clock::time_point lastRenderTime = std::chrono::high_resolution_clock::now();
     std::chrono::high_resolution_clock::time_point lastUpdateTime = std::chrono::high_resolution_clock::now();
+    std::chrono::high_resolution_clock::time_point lastRenderTime = std::chrono::high_resolution_clock::now();
+
     while( !quit )
     {
+        float lastUpdateDelta = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - lastUpdateTime).count()/(float)1000000000;
+        lastUpdateTime = std::chrono::high_resolution_clock::now();
         while( SDL_PollEvent(&e) )
         {
             switch( e.type ) {
@@ -116,19 +119,18 @@ int Core::start()
                             a.action = action;
                             a.type = ActionType::KEYBOARD;
                             a.state = ActionState::PRESSED;
-                            Actions::call(a);
+                            Actions::call(a, lastUpdateDelta);
                         }
                         held_keys.push_back(e.key.keysym.sym);
                     }
                     break;
                 case SDL_KEYUP:
                     for(auto const& action : Keyboard::getActions(e.key.keysym.sym))
-                    {    printf("%i\n", fps);
-
+                    {
                         Action a; 
                         a.type = ActionType::KEYBOARD;
                         a.state = ActionState::RELEASED;
-                        Actions::call(a);
+                        Actions::call(a, lastUpdateDelta);
                     }
                     held_keys.erase(std::remove(held_keys.begin(), held_keys.end(), e.key.keysym.sym), held_keys.end()); 
                     break;
@@ -138,7 +140,7 @@ int Core::start()
                         Action a; 
                         a.type = ActionType::MOUSE;
                         a.state = ActionState::PRESSED;
-                        Actions::call(a);
+                        Actions::call(a, lastUpdateDelta);
                     }
                     held_mousebuttons.push_back(e.button.button);
                     break;
@@ -148,7 +150,7 @@ int Core::start()
                         Action a; 
                         a.type = ActionType::MOUSE;
                         a.state = ActionState::RELEASED;
-                        Actions::call(a);
+                        Actions::call(a, lastUpdateDelta);
                     }
                     held_mousebuttons.erase(std::remove(held_mousebuttons.begin(), held_mousebuttons.end(), e.button.button), held_mousebuttons.end()); 
                     break;
@@ -162,7 +164,7 @@ int Core::start()
                 a.action = action;
                 a.type = ActionType::KEYBOARD;
                 a.state = ActionState::HELD;
-                Actions::call(a);
+                Actions::call(a, lastUpdateDelta);
             }
         }
         for(auto mouse : held_mousebuttons)
@@ -172,19 +174,16 @@ int Core::start()
                 Action a; 
                 a.type = ActionType::MOUSE;
                 a.state = ActionState::HELD;
-                Actions::call(a);
+                Actions::call(a, lastUpdateDelta);
             }
         }
-        
+        l.update(lastUpdateDelta);
+
         g.render();
 
         float lastRenderDelta = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - lastRenderTime).count()/(float)1000000000;
         fps = 1/lastRenderDelta;
         lastRenderTime = std::chrono::high_resolution_clock::now();
-
-        float lastUpdateDelta = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - lastUpdateTime).count()/(float)1000000000;
-        l.update(lastUpdateDelta);
-        lastUpdateTime = std::chrono::high_resolution_clock::now();
 
         SDL_GL_SwapWindow(window);
     }

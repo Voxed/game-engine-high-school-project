@@ -8,13 +8,9 @@
 
 class ScreenMenu : public Screen, public ActionListener
 {
-    Texture text;
-    Texture text2;
     Texture font;
     SpriteFont sf;
     Shader shad;
-    float x;
-    int fps;
 public:
     ScreenMenu();
     void render(SpriteBatch& batch);

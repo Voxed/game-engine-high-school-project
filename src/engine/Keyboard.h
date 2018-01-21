@@ -9,10 +9,10 @@
 
 class Keyboard
 {
-    static std::map<int, std::vector< std::string >> binds;
+    static std::map<int, std::vector< const char* >> binds;
 public:
-    static void bindAction(int keycode, std::string action);
-    static std::vector<std::string> getActions(int keycode);
+    static void bindAction(int keycode, const char* action);
+    static std::vector<const char*> getActions(int keycode);
 };
 
 #endif

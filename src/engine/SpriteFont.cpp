@@ -37,3 +37,15 @@ std::vector<Sprite> SpriteFont::getSprites(std::string text, int x, int y, Shade
 
     return sprites;
 }
+
+float SpriteFont::getWidth(int length, float scale)
+{
+    float font_width = font_texture->getWidth()/characters_row;
+    return length*(font_width+letter_spacing)*scale;
+}
+
+float SpriteFont::getHeight(float scale)
+{
+    float font_height = font_texture->getHeight()/characters_height;
+    return font_height*scale;
+}

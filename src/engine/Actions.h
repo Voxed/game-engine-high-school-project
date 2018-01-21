@@ -22,7 +22,7 @@ enum ActionType
 
 struct Action
 {
-    std::string action;
+    const char* action;
     ActionType type;
     ActionState state;
 };
@@ -30,7 +30,7 @@ struct Action
 class ActionListener
 {
 public:
-    virtual void onAction(Action action);
+    virtual void onAction(Action action, float delta);
 };
 
 class Actions
@@ -39,7 +39,7 @@ class Actions
 public:
     static void addListener(ActionListener* listener);
     static void removeListener( ActionListener* );
-    static void call(Action action);
+    static void call(Action action, float delta);
 };
 
 #endif

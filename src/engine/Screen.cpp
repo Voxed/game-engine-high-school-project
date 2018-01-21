@@ -3,7 +3,6 @@
 void Screen::render(SpriteBatch& batch)
 {
     //Maybe some fun generic screen?
-    puts("yo");
 }
 
 void Screen::update(float delta)

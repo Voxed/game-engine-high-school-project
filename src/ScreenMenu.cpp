@@ -2,9 +2,7 @@
 
 ScreenMenu::ScreenMenu()
 {
-
-    text = Texture("./resources/textures/lol.png");
-    text2 = Texture("./resources/textures/demon.png");
+    setBackgroundColor(Color(1,1,1));
     font = Texture("./resources/textures/spritefont.png");
     shad = Shader::loadShaderFromFile("default");
     sf = SpriteFont(&font, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.,!?+-0123456789:", 10, 10, 0 );
@@ -12,18 +10,19 @@ ScreenMenu::ScreenMenu()
 
 void ScreenMenu::render(SpriteBatch& batch)
 {
-    batch.draw(sf.getSprites("FPS: " + std::to_string(core->getFPS()), 5,5,&shad, 0.0f, 5.0f));
-
-    batch.draw(Sprite(&text,&shad,50,50));
-    for(int i = 0; i < 2000; i++)
+    std::vector<std::string> buttons = {
+        "New Game",
+        "Continue",
+        "Options"
+    };
+    for(int i = 0; i < buttons.size(); i++)
     {
-        batch.draw(Sprite(&text2,&shad,1000+cos(i)*500,50+floor(i/5), 0.0f, 0.25f, 0.25f, false));
+        batch.draw(sf.getSprites(buttons[i], core->getWidth()/2 - sf.getWidth(buttons[i].size(), 5.0f)/2,i*(50+sf.getHeight(5.0f))-(sf.getHeight(5.0)+(buttons.size()-1)*(50+sf.getHeight(5.0f)))/2 + core->getHeight()/2,&shad, 0.0f, 5.0f));
     }
 }
 
 void ScreenMenu::update(float delta)
 {
-    x+= delta;
 }
 
 void ScreenMenu::onAction(Action action)
