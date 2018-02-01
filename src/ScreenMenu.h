@@ -9,18 +9,17 @@
 
 class ScreenMenu : public Screen, public ActionListener
 {
-    Texture font;
-    Texture planet;
-    Texture cloud;
-    SpriteFont sf;
-    Shader shad;
-    Shader shad2;
-    Mesh mesh;
-    float rot;
-    float scale;
-    
-    bool rotating = false;
-    float rot_velocity;
+    Texture fontTexture;
+    Texture planetTexture;
+    Texture cloudsTexture;
+    SpriteFont spritefont;
+    Shader defaultShader;
+    Shader toonShader;
+    Mesh sphereMesh;
+
+    float planetRotation;
+    bool isRotating = false;
+    float rotationVelocity;
 public:
     ScreenMenu();
     ~ScreenMenu();
