@@ -7,13 +7,14 @@
 
 class Texture
 {
-    GLuint textureID;
+    GLuint textureID = 0;
     int width;
     int height;
     bool partialTransparency;
 public:
     Texture();
-    Texture(std::string filePath);  
+    Texture(std::string filePath);
+    Texture(int width, int height, int mode);  
     GLuint getTextureID();  
     int getWidth();
     int getHeight();

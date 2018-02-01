@@ -5,6 +5,10 @@
 #include <vector>
 #include <map>
 #include <algorithm>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <chrono>
+
 
 class SpriteBatch
 {
@@ -16,6 +20,8 @@ public:
     void draw(Sprite s);
     void draw(std::vector<Sprite> s);
     void clear();
+    void render(int left, int right, int bottom, int top);
+    void render(int height, int width);
 };
 #endif
 

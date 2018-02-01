@@ -23,7 +23,7 @@ class Core
     int initSDL();
     int initWindow();
     int initGL();
-    bool error;
+    bool error = false;
     Screen * scr;
     bool started = false;
     int fps;

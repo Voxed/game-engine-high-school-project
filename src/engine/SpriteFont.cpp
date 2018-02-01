@@ -30,7 +30,6 @@ std::vector<Sprite> SpriteFont::getSprites(std::string text, int x, int y, Shade
             float subY = floor(index/characters_height)/characters_height;
             float subW = font_width/font_texture->getWidth();
             float subH = font_height/font_texture->getHeight();            
-
             sprites.push_back(Sprite(font_texture, shader, x + offset, y, subX, subY, subW, subH, depth, scale, scale));
         }
     }
