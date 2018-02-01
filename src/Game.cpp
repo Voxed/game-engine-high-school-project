@@ -1,6 +1,6 @@
 #include "Game.h"
 
-Game::Game()
+Game::Game() : core((char *)"Voxel Engine Demo", 720, 480)
 {
 
 }

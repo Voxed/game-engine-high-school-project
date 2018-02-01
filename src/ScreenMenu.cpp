@@ -29,6 +29,7 @@ void ScreenMenu::render(SpriteBatch& b)
     target.unbind();
     b.draw(Sprite(target.getTexture(), &toonShader, 720/2-300, 480/2-300, 0.0f, 4.0f, 4.0f));
     b.draw(spritefont.getSprites("Voxel Engine: Mesh rendering", 10, 10, &defaultShader, 0.0f, 4.0f));
+    b.draw(spritefont.getSprites("FPS: " + std::to_string(core->getFPS()), 10, 10 + 8*4, &defaultShader, 0.0f, 4.0f));
 }
 
 void ScreenMenu::update(float delta)

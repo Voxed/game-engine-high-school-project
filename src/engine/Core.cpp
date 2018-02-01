@@ -1,11 +1,11 @@
 #include "Core.h"
 
-Core::Core() 
+Core::Core(char * title, int width, int height) 
 {
     int sdlErrorCode = Core::initSDL();
     if( sdlErrorCode == 0 )
     {
-        int windowErrorCode = Core::initWindow();
+        int windowErrorCode = Core::initWindow(title, width, height);
         if( windowErrorCode == 0 )
         {
             int glErrorCode = Core::initGL();
@@ -41,14 +41,14 @@ int Core::initSDL()
     return 0;
 }
 
-int Core::initWindow()
+int Core::initWindow(char * title, int width, int height)
 {
     window = SDL_CreateWindow(
-        "Voxel Engine",
+        title,
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
-        720,
-        480,
+        width,
+        height,
         SDL_WINDOW_OPENGL
     );
     if( window == NULL )
@@ -101,7 +101,7 @@ int Core::start()
     float lastKeyUpdate;
     float lastLogicUpdate;
     float lastMouseUpdate;
-
+    float lastRender;
 
 
     while( !quit )
@@ -185,6 +185,8 @@ int Core::start()
         lastLogicUpdate = SDL_GetPerformanceCounter();
 
         g.render();
+        fps = 1.0f/((SDL_GetPerformanceCounter() - lastRender)/SDL_GetPerformanceFrequency());
+        lastRender = SDL_GetPerformanceCounter();
 
         SDL_GL_SwapWindow(window);
     }

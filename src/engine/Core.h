@@ -21,14 +21,14 @@ class Core
     SDL_Window * window;
     SDL_GLContext context;
     int initSDL();
-    int initWindow();
+    int initWindow(char * title, int width, int height);
     int initGL();
     bool error = false;
     Screen * scr;
     bool started = false;
-    int fps;
+    float fps;
 public:
-    Core();
+    Core(char * title, int width, int height);
     ~Core();
     bool hasError();
     bool hasStarted();

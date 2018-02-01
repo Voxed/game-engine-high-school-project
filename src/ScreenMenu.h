@@ -19,7 +19,7 @@ class ScreenMenu : public Screen, public ActionListener
 
     float planetRotation;
     bool isRotating = false;
-    float rotationVelocity;
+    float rotationVelocity = 0;
 public:
     ScreenMenu();
     ~ScreenMenu();
