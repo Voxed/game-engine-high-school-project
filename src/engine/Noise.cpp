@@ -1,8 +1,9 @@
 #include "Noise.h"
 
-Texture Noise::generatePerlin(int height, int width, float a)
+Texture Noise::generatePerlin(int height, int width, float a, float seed)
 {
-    float seed = SDL_GetPerformanceCounter()%9999; //yes i know this is ugly LOL
+    if(seed == 0)
+        seed = SDL_GetPerformanceCounter()%9999; //yes i know this is ugly LOL
     std::vector<Color> colors;
     float c_max = 0;
     float c_min = 0;
@@ -33,9 +34,10 @@ Texture Noise::generatePerlin(int height, int width, float a)
     }
 }
 
-Texture Noise::generatePerlin(int height, int width, float a, std::vector<float> levels, std::vector<Color> level_colors)
+Texture Noise::generatePerlin(int height, int width, float a, std::vector<float> levels, std::vector<Color> level_colors, float seed)
 {
-    float seed = SDL_GetPerformanceCounter()%9999; //but atleast it works :)
+    if(seed == 0)
+        seed = SDL_GetPerformanceCounter()%9999; //but atleast it works :)
     std::vector<Color> colors;
     float c_max = 0;
     float c_min = 0;

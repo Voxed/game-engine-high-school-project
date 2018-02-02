@@ -9,8 +9,8 @@
 class Noise
 {
 public:
-    static Texture generatePerlin(int height, int width, float a);
-    static Texture generatePerlin(int height, int width, float a, std::vector<float>, std::vector<Color>);
+    static Texture generatePerlin(int height, int width, float a, float seed = 0);
+    static Texture generatePerlin(int height, int width, float a, std::vector<float>, std::vector<Color>, float seed = 0);
 };
 
 #endif
