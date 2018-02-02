@@ -79,6 +79,7 @@ void SpriteBatch::render(int left, int right, int bottom, int top)
     std::vector<GLfloat> vertices;
     std::vector<GLuint> indices;
     std::vector<GLfloat> texCoords;
+    std::vector<GLfloat> colors;
 
 
     struct DrawRange
@@ -123,11 +124,14 @@ void SpriteBatch::render(int left, int right, int bottom, int top)
                 std::vector<GLfloat> vert;
                 std::vector<GLuint> ind;
                 std::vector<GLfloat> tc;
+                std::vector<GLfloat> col;
+                
 
-                sprite->getData(vert,tc,ind, vertices_offset);
+                sprite->getData(vert,tc,ind,col, vertices_offset);
                 vertices.insert(vertices.end(), vert.begin(), vert.end());      
                 indices.insert(indices.end(), ind.begin(), ind.end());             
                 texCoords.insert(texCoords.end(), tc.begin(), tc.end());  
+                colors.insert(colors.end(), col.begin(), col.end());  
             }
             ranges.push_back(dr);
 
@@ -153,11 +157,13 @@ void SpriteBatch::render(int left, int right, int bottom, int top)
         std::vector<GLfloat> vert;
         std::vector<GLuint> ind;
         std::vector<GLfloat> tc;
+        std::vector<GLfloat> col;
 
-        sprite->getData(vert,tc,ind, vertices_offset);
+        sprite->getData(vert,tc,ind,col, vertices_offset);
         vertices.insert(vertices.end(), vert.begin(), vert.end());      
         indices.insert(indices.end(), ind.begin(), ind.end());             
         texCoords.insert(texCoords.end(), tc.begin(), tc.end());    
+        colors.insert(colors.end(), col.begin(), col.end());  
         ranges.push_back(dr);
     }
 
@@ -171,6 +177,11 @@ void SpriteBatch::render(int left, int right, int bottom, int top)
     glGenBuffers(1, &tbo);
     glBindBuffer(GL_ARRAY_BUFFER, tbo);
     glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(GLfloat), &texCoords[0], GL_STATIC_DRAW);
+
+    GLuint cbo = -1;
+    glGenBuffers(1, &cbo);
+    glBindBuffer(GL_ARRAY_BUFFER, cbo);
+    glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(GLfloat), &colors[0], GL_STATIC_DRAW);
 
     GLuint ibo = -1;
     glGenBuffers(1, &ibo);
@@ -197,6 +208,7 @@ void SpriteBatch::render(int left, int right, int bottom, int top)
             glUniform1i(range.shader->getUniformLocation("tex"), 0);
 
             range.shader->bindArrayBuffer(range.shader->getAttribLocation("vertexPos"), vbo, GL_FLOAT, 3, 3 * sizeof(GLfloat));
+            range.shader->bindArrayBuffer(range.shader->getAttribLocation("colorModification"), cbo, GL_FLOAT, 4, 4 * sizeof(GLfloat));
             range.shader->bindArrayBuffer(range.shader->getAttribLocation("textureCoords"), tbo, GL_FLOAT, 2, 2 * sizeof(GLfloat));
         
         }
@@ -211,8 +223,8 @@ void SpriteBatch::render(int left, int right, int bottom, int top)
         }
     }
 
-    GLuint buffers[3] = {vbo, tbo, ibo};
-    glDeleteBuffers(3, buffers);
+    GLuint buffers[4] = {vbo, tbo, ibo, cbo};
+    glDeleteBuffers(4, buffers);
     
     clear();
 }

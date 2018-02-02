@@ -19,7 +19,7 @@ public:
     Mesh();
     Mesh(const char* pathname);
     
-    void render(Texture& texture, Shader& render_shader, glm::mat4 mvm);
+    void render(Texture& texture, Shader& render_shader, glm::mat4 mvm, Color color = Color(1,1,1));
 
 };
 

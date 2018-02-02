@@ -76,8 +76,18 @@ Mesh::Mesh(const char* path)
     }
 }
 
-void Mesh::render(Texture& texture, Shader& shader, glm::mat4 mvm)
+void Mesh::render(Texture& texture, Shader& shader, glm::mat4 mvm, Color c)
 {
+    std::vector<GLfloat> colors;
+
+    for(int i = 0; i < vertices.size()/3; i++)
+    {
+        colors.push_back(c.r);
+        colors.push_back(c.g);
+        colors.push_back(c.b);
+        colors.push_back(c.a);
+    }
+    
     GLint dims[4] = {0};
     glGetIntegerv(GL_VIEWPORT, dims);
     int w = dims[2];
@@ -94,6 +104,11 @@ void Mesh::render(Texture& texture, Shader& shader, glm::mat4 mvm)
     glBindBuffer(GL_ARRAY_BUFFER, tbo);
     glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(GLfloat), &texCoords[0], GL_STATIC_DRAW);
 
+    GLuint cbo = -1;
+    glGenBuffers(1, &cbo);
+    glBindBuffer(GL_ARRAY_BUFFER, cbo);
+    glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(GLfloat), &colors[0], GL_STATIC_DRAW);
+
     texture.bind(GL_TEXTURE0);
 
     shader.use();
@@ -102,6 +117,7 @@ void Mesh::render(Texture& texture, Shader& shader, glm::mat4 mvm)
     glUniform1i(shader.getUniformLocation("tex"), 0);
 
     shader.bindArrayBuffer(shader.getAttribLocation("vertexPos"), vbo, GL_FLOAT, 3, 3 * sizeof(GLfloat));
+    shader.bindArrayBuffer(shader.getAttribLocation("colorModification"), cbo, GL_FLOAT, 4, 4 * sizeof(GLfloat));
     shader.bindArrayBuffer(shader.getAttribLocation("textureCoords"), tbo, GL_FLOAT, 2, 2 * sizeof(GLfloat));
 
     glDrawArrays(GL_TRIANGLES, 0, vertices.size()/3);

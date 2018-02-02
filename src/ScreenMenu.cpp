@@ -7,6 +7,8 @@ ScreenMenu::ScreenMenu()
     backgroundColor = Color(0.0,0.0,0.1);
     
     defaultShader = Shader::loadShaderFromFile("default");
+    if(!defaultShader.isCompiled())
+        printf("%s\n", defaultShader.getErrorString().c_str());
     toonShader = Shader::loadShaderFromFile("toon");
     
     spritefont = SpriteFont(&fontTexture, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.,!?+-0123456789:", 10, 10, 0 );
@@ -47,7 +49,7 @@ void ScreenMenu::render(SpriteBatch& b)
     b.draw(spritefont.getSprites("FPS: " + std::to_string(core->getFPS()), 10, 10 + 8*4, &defaultShader, 0.0f, 4.0f));
     for(Star s : stars)
     {
-        b.draw(Sprite(&starTexture, &defaultShader, s.x,s.y, 0.1f, 4.0f, 4.0f));
+        b.draw(Sprite(&starTexture, &defaultShader, s.x,s.y, 0.1f, 4.0f, 4.0f, 0, 0, 0.0f, Color(1,0,0)));
     }
 }
 
@@ -62,10 +64,16 @@ void ScreenMenu::update(float delta)
     std::vector<Star> newStars;
     for(Star s : stars)
     {
-        s.y += s.v*4*delta;
+        s.y += s.v/10*4*delta + s.v/10*4*delta*rotationVelocity*50;
         if(s.y > 480)
         {
             s.y = 0;
+            s.x = rand() % 720;
+            s.v = (rand() % 10) + 10;
+        }
+        if(s.y < 0)
+        {
+            s.y = 480;
             s.x = rand() % 720;
             s.v = (rand() % 10) + 10;
         }
