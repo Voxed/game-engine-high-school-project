@@ -8,6 +8,7 @@ out vec2 texCoords;
 
 void main()
 {
+    gl_FrontColor = gl_Color;
     texCoords = textureCoords;
     gl_Position = projectionMatrix * modelViewMatrix * vec4(vertexPos, 1.0);
 }
