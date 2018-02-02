@@ -16,15 +16,19 @@ Shader::Shader(GLuint programID)
     this->programID = programID;
 }
 
-void Shader::bindTexture(GLenum target, Texture texture)
+void Shader::bindTexture(int target, char* uniform, Texture texture)
 {
     GLint programBak;
     glGetIntegerv(GL_CURRENT_PROGRAM, &programBak);
     bool use = (programBak != programID);
 
+    //Generated code
+    GLenum targetE = target==0 ? GL_TEXTURE0 : target==1 ? GL_TEXTURE1 : target==2 ? GL_TEXTURE2 : target==3 ? GL_TEXTURE3 : target==4 ? GL_TEXTURE4 : target==5 ? GL_TEXTURE5 : target==6 ? GL_TEXTURE6 : target==7 ? GL_TEXTURE7 : target==8 ? GL_TEXTURE8 : target==9 ? GL_TEXTURE9 : target==10 ? GL_TEXTURE10 : target==11 ? GL_TEXTURE11 : target==12 ? GL_TEXTURE12 : target==13 ? GL_TEXTURE13 : target==14 ? GL_TEXTURE14 : target==15 ? GL_TEXTURE15 : target==16 ? GL_TEXTURE16 : target==17 ? GL_TEXTURE17 : target==18 ? GL_TEXTURE18 : target==19 ? GL_TEXTURE19 : target==20 ? GL_TEXTURE20 : target==21 ? GL_TEXTURE21 : target==22 ? GL_TEXTURE22 : target==23 ? GL_TEXTURE23 : target==24 ? GL_TEXTURE24 : target==25 ? GL_TEXTURE25 : target==26 ? GL_TEXTURE26 : target==27 ? GL_TEXTURE27 : target==28 ? GL_TEXTURE28 : target==29 ? GL_TEXTURE29 : target==30 ? GL_TEXTURE30 : target==31 ? GL_TEXTURE31 : 0;
+
     if (use) glUseProgram(programID);
-    glActiveTexture( target );
+    glActiveTexture( targetE );
     glBindTexture( GL_TEXTURE_2D, texture.getTextureID() );
+    glUniform1i(getUniformLocation(uniform), target);
     if (use) glUseProgram(programBak);
 }
 
