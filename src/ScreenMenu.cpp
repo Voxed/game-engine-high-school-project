@@ -9,14 +9,18 @@ ScreenMenu::ScreenMenu()
     defaultShader = Shader::loadShaderFromFile("default");
     if(!defaultShader.isCompiled())
         printf("%s\n", defaultShader.getErrorString().c_str());
-    toonShader = Shader::loadShaderFromFile("toon");
+    lightShader = Shader::loadShaderFromFile("light");
     
     spritefont = SpriteFont(&fontTexture, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.,!?+-0123456789:", 10, 10, 0 );
     sphereMesh = Mesh("./resources/meshes/planet.obj");
     starTexture = Texture({Color(1,1,1)},1,1,GL_RGB);
 
-    planetTexture = Noise::generatePerlin(128,128,8, {0.5,0.6,1.0}, {Color(0.25,0.25,1.0), Color(0.75,0.75,0.5), Color(0.25,0.75,0.25)});
-    cloudsTexture = Noise::generatePerlin(128,128,7, {0.4, 1.0}, {Color(0.85,0.85,1.0), Color(1,1,1,0.0)});
+    float planetSeed = SDL_GetPerformanceCounter() % 9999;
+    float cloudSeed = SDL_GetPerformanceCounter() % 9999;
+    planetTexture = Noise::generatePerlin(128,128,8, {0.5,0.6,1.0}, {Color(0.4,0.4,1.0), Color(0.75,0.75,0.5), Color(0.25,0.75,0.25)}, planetSeed);
+    planetLightTexture = Noise::generatePerlin(128,128,8, {0.5,1.0}, {Color(0.5,0.5,1.0), Color(0.5,1.0,0.5)}, planetSeed);
+    cloudsTexture = Noise::generatePerlin(128,128,4, {0.3, 1.0}, {Color(0.8,0.8,0.8), Color(1,1,1,0.0)}, cloudSeed);
+    cloudsLightTexture =  Noise::generatePerlin(128,128,4, {0.3, 1.0}, {Color(1.0,1.0,1.0), Color(0,0,0,0.0)}, cloudSeed);
 
     Keyboard::bindAction(SDLK_d, "rot_right");
     Keyboard::bindAction(SDLK_a, "rot_left");
@@ -31,6 +35,8 @@ ScreenMenu::ScreenMenu()
         s.v = (rand() % 10) +10;
         stars.push_back(s);
     }  
+
+    Texture lightMap;
 }
 
 ScreenMenu::~ScreenMenu()
@@ -44,13 +50,20 @@ void ScreenMenu::render(SpriteBatch& b)
     sphereMesh.render(planetTexture, defaultShader, glm::rotate(glm::scale(glm::translate(glm::mat4(), glm::vec3(75,75,0)), glm::vec3(37,37,0.5)),planetRotation, glm::vec3(0,1,0.2)));
     sphereMesh.render(cloudsTexture, defaultShader, glm::rotate(glm::scale(glm::translate(glm::mat4(), glm::vec3(75,75,0)), glm::vec3(39,39,0.6)),planetRotation*5, glm::vec3(0,1,0.2)));
     target.unbind();
-    b.draw(Sprite(target.getTexture(), &toonShader, 720/2-300, 480/2-300, 0.0f, 4.0f, 4.0f));
+
+    lightMap.remove();
+    RenderTarget lightMapTarget = RenderTarget(150,150);
+    lightMapTarget.bind();
+    sphereMesh.render(planetLightTexture, defaultShader, glm::rotate(glm::scale(glm::translate(glm::mat4(), glm::vec3(75,75,0)), glm::vec3(37,37,0.5)),planetRotation, glm::vec3(0,1,0.2)));
+    sphereMesh.render(cloudsLightTexture, defaultShader, glm::rotate(glm::scale(glm::translate(glm::mat4(), glm::vec3(75,75,0)), glm::vec3(39,39,0.6)),planetRotation*5, glm::vec3(0,1,0.2)));
+    lightMapTarget.unbind();
+    lightMap = lightMapTarget.getTexture();
+
+    lightShader.bindTexture(1, "lightMap", lightMap);
+    b.draw(Sprite(target.getTexture(), &lightShader, 720/2-300, 480/2-300, 0.0f, 4.0f, 4.0f, 0, 0, 0, Color(1,1,1), true));
+    //b.draw(Sprite(lightMap, &defaultShader, 720/2-300, 480/2-300, 0.0f, 4.0f, 4.0f));
     b.draw(spritefont.getSprites("Voxel Engine: Mesh rendering", 10, 10, &defaultShader, 0.0f, 4.0f));
     b.draw(spritefont.getSprites("FPS: " + std::to_string(core->getFPS()), 10, 10 + 8*4, &defaultShader, 0.0f, 4.0f));
-    for(Star s : stars)
-    {
-        b.draw(Sprite(&starTexture, &defaultShader, s.x,s.y, 0.1f, 4.0f, 4.0f, 0, 0, 0.0f, Color(1,0,0)));
-    }
 }
 
 void ScreenMenu::update(float delta)

@@ -13,10 +13,13 @@ class ScreenMenu : public Screen, public ActionListener
     Texture fontTexture;
     Texture planetTexture;
     Texture cloudsTexture;
+    Texture planetLightTexture;
+    Texture cloudsLightTexture;
     Texture starTexture;
+    Texture lightMap;
     SpriteFont spritefont;
     Shader defaultShader;
-    Shader toonShader;
+    Shader lightShader;
     Mesh sphereMesh;
     struct Star
     {
