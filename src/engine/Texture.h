@@ -3,7 +3,10 @@
 #include <string>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL.h>
+#include <vector>
 #include <GL/glew.h>
+
+#include "Color.h"
 
 class Texture
 {
@@ -13,6 +16,7 @@ class Texture
     bool partialTransparency;
 public:
     Texture();
+    Texture(std::vector<Color> colors, int width, int height, int mode);
     Texture(std::string filePath);
     Texture(int width, int height, int mode);  
     GLuint getTextureID();  

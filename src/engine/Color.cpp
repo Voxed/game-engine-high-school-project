@@ -10,6 +10,7 @@ Color::Color(float r, float g, float b)
     this->r = r;
     this->g = g;
     this->b = b;
+    this->a = 1.0;
 }
 
 Color::Color() : r(0.0), g(1.0) , b(0.75), a(1.0)

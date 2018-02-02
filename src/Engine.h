@@ -5,5 +5,6 @@
 #include "engine/SpriteFont.h"
 #include "engine/Mesh.h"
 #include "engine/RenderTarget.h"
+#include "engine/Noise.h"
 
 #endif

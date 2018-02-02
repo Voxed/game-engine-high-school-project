@@ -6,16 +6,24 @@
 #include <sstream>
 #include <tgmath.h>
 #include <chrono>
+#include <cstdlib>
 
 class ScreenMenu : public Screen, public ActionListener
 {
     Texture fontTexture;
     Texture planetTexture;
     Texture cloudsTexture;
+    Texture starTexture;
     SpriteFont spritefont;
     Shader defaultShader;
     Shader toonShader;
     Mesh sphereMesh;
+    struct Star
+    {
+        float x, y;
+        float v;
+    };
+    std::vector<Star> stars;
 
     float planetRotation;
     bool isRotating = false;

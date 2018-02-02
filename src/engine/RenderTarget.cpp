@@ -24,6 +24,7 @@ RenderTarget::RenderTarget(int width, int height)
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthrenderbufferID);
 
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.getTextureID(), 0);
+    glClearColor(0,0,0,0);
     glClear( GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT );
     
     glBindFramebuffer(GL_FRAMEBUFFER, 0);

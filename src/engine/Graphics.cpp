@@ -1,10 +1,7 @@
 #include "Graphics.h"
 Graphics::Graphics(Core * core, Logic& logic) : logic(logic)
 {
-    
-    Color c = core->getScreen()->getBackgroundColor();
-    glClearColor( c.r, c.g, c.b, c.a );
-    
+        
     glEnable( GL_TEXTURE_2D );
     glEnable( GL_DEPTH_TEST );
 
@@ -15,6 +12,8 @@ Graphics::Graphics(Core * core, Logic& logic) : logic(logic)
 
 void Graphics::render()
 {
+    Color c = core->getScreen()->backgroundColor;
+    glClearColor( c.r, c.g, c.b, c.a );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
     core->getScreen()->render(batch);

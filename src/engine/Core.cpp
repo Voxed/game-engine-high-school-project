@@ -98,10 +98,10 @@ int Core::start()
     std::vector<int> held_keys = std::vector<int>();
     std::vector<int> held_mousebuttons = std::vector<int>();
 
-    float lastKeyUpdate;
-    float lastLogicUpdate;
-    float lastMouseUpdate;
-    float lastRender;
+    float lastKeyUpdate = SDL_GetPerformanceCounter();
+    float lastLogicUpdate = SDL_GetPerformanceCounter();
+    float lastMouseUpdate = SDL_GetPerformanceCounter();
+    float lastRender = SDL_GetPerformanceCounter();
 
 
     while( !quit )
