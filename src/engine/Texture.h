@@ -23,5 +23,6 @@ public:
     int getWidth();
     int getHeight();
     void bind(GLenum target);
+    void remove();
 };
 #endif

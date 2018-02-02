@@ -77,3 +77,8 @@ void Texture::bind(GLenum target)
     glActiveTexture( target );
     glBindTexture( GL_TEXTURE_2D, getTextureID() );
 }
+
+void Texture::remove()
+{
+    glDeleteTextures(1, &textureID);
+}
