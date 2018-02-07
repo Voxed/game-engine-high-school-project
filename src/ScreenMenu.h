@@ -10,27 +10,6 @@
 
 class ScreenMenu : public Screen, public ActionListener
 {
-    Texture fontTexture;
-    Texture planetTexture;
-    Texture cloudsTexture;
-    Texture planetLightTexture;
-    Texture cloudsLightTexture;
-    Texture starTexture;
-    Texture lightMap;
-    SpriteFont spritefont;
-    Shader defaultShader;
-    Shader lightShader;
-    Mesh sphereMesh;
-    struct Star
-    {
-        float x, y;
-        float v;
-    };
-    std::vector<Star> stars;
-
-    float planetRotation;
-    bool isRotating = false;
-    float rotationVelocity = 0;
 public:
     ScreenMenu();
     ~ScreenMenu();

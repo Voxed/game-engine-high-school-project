@@ -1,10 +1,20 @@
 #include "SpriteBatch.h"
 
+/**
+ * @brief Draw one sprite to the batch
+ * 
+ * @param sprite The sprite to draw
+ */
 void SpriteBatch::draw(Sprite sprite)
 {
     sprites.push_back(sprite);
 }
 
+/**
+ * @brief Draw multiple sprites to the batch
+ * 
+ * @param sprites The sprites to draw
+ */
 void SpriteBatch::draw(std::vector<Sprite> sprites)
 {
     for(auto sprite : sprites)
@@ -13,6 +23,11 @@ void SpriteBatch::draw(std::vector<Sprite> sprites)
     }
 }
 
+/**
+ * @brief Get a list of all the opaque sprites, sorted by texture and shader
+ * 
+ * @return std::map<Shader*, std::map<Texture*, std::vector<Sprite*>>> A list of sprites sorted by texture and shader
+ */
 std::map<Shader*, std::map<Texture*, std::vector<Sprite*>>> SpriteBatch::getOpaqueSprites()
 {
 
@@ -38,6 +53,11 @@ std::map<Shader*, std::map<Texture*, std::vector<Sprite*>>> SpriteBatch::getOpaq
     return sprites_by_texture_by_shader;
 };
 
+/**
+ * @brief Get a list of all transparent sprite
+ * 
+ * @return std::vector<Sprite*> A list of all transparent sprites
+ */
 std::vector<Sprite*> SpriteBatch::getTransparentSprites()
 {
     std::vector<Sprite*> sorted_sprites;
@@ -52,6 +72,12 @@ std::vector<Sprite*> SpriteBatch::getTransparentSprites()
     return sorted_sprites;
 }
 
+/**
+ * @brief Empty the sprite batch
+ *
+ * And remove all temporary textures
+ * 
+ */
 void SpriteBatch::clear()
 {
     //Remove all temporary textures
@@ -66,11 +92,25 @@ void SpriteBatch::clear()
     sprites.clear();
 }
 
+/**
+ * @brief Render spritebatch to the canvas
+ * 
+ * @param width The width of the canvas
+ * @param height The height of the canvas
+ */
 void SpriteBatch::render(int width, int height)
 {
     render(0, width, 0, height);
 }
 
+/**
+ * @brief Render spritebatch to the canvas
+ * 
+ * @param left The left of the canvas
+ * @param right The right of the canvas
+ * @param bottom The bottom of the canvas
+ * @param top The top of the canvas
+ */
 void SpriteBatch::render(int left, int right, int bottom, int top)
 {
     glm::mat4 projectionMatrix = glm::ortho((float)left, (float)right, (float)bottom, (float)top, 1.0f, -1.0f);
@@ -119,7 +159,7 @@ void SpriteBatch::render(int left, int right, int bottom, int top)
             {
                 dr.elements += 1;
                 //Apply sprites to indices/vertices/texcoords
-                uint vertices_offset = vertices.size()/3;
+               unsigned int vertices_offset = vertices.size()/3;
 
                 std::vector<GLfloat> vert;
                 std::vector<GLuint> ind;
@@ -152,7 +192,7 @@ void SpriteBatch::render(int left, int right, int bottom, int top)
         dr.transparent = true;
         dr.shader = sprite->getShader();
         //Apply sprites to indices/vertices/texcoords
-        uint vertices_offset = vertices.size()/3;
+       unsigned int vertices_offset = vertices.size()/3;
 
         std::vector<GLfloat> vert;
         std::vector<GLuint> ind;
@@ -188,7 +228,7 @@ void SpriteBatch::render(int left, int right, int bottom, int top)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
 
-    uint offset = 0;
+   unsigned int offset = 0;
     for(auto &range: ranges)
     {
         if(range.transparent) 

@@ -1,21 +1,42 @@
 #include "Shader.h"
 
+/**
+ * @brief Initialize an empty shader object
+ * 
+ */
 Shader::Shader()
 {
     compiled = false;
 }
 
+/**
+ * @brief Initialize a shader object with an error
+ * 
+ * @param errStr The error string
+ */
 Shader::Shader(std::string errStr)
 {
     compiled = false;
     this->errStr = errStr;
 }
 
+/**
+ * @brief Initialize a shader from a program id
+ * 
+ * @param programID The program id
+ */
 Shader::Shader(GLuint programID)
 {
     this->programID = programID;
 }
 
+/**
+ * @brief Bind a texture to the shader
+ * 
+ * @param target The texture id to bind to
+ * @param uniform The uniform to bind it to
+ * @param texture The texture to be bound
+ */
 void Shader::bindTexture(int target, char* uniform, Texture texture)
 {
     GLint programBak;
@@ -32,21 +53,47 @@ void Shader::bindTexture(int target, char* uniform, Texture texture)
     if (use) glUseProgram(programBak);
 }
 
+/**
+ * @brief Get a uniform location
+ * 
+ * @param s The name of the unifrom
+ * @return GLint The location of a uniform
+ */
 GLint Shader::getUniformLocation(std::string s)
 {
     return glGetUniformLocation(programID, s.c_str());
 }
 
+/**
+ * @brief Get an attribute location
+ * 
+ * @param s The name of the attribute
+ * @return GLint The location of the attribute
+ */
 GLint Shader::getAttribLocation(std::string s)
 {
     return glGetAttribLocation(programID, s.c_str());
 }
 
+/**
+ * @brief Get the program id
+ * 
+ * @return GLuint The program id
+ */
 GLuint Shader::getProgramID()
 {
     return programID;
 }
 
+/**
+ * @brief Bind an array buffer
+ * 
+ * @param attribLocation The attribute location
+ * @param bufferObject The buffer object
+ * @param type The type of the data
+ * @param size The size of the object
+ * @param stride The stride
+ */
 void Shader::bindArrayBuffer(GLuint attribLocation, GLuint bufferObject, GLenum type, GLint size, GLsizei stride)
 {
     GLint programBak;
@@ -60,28 +107,49 @@ void Shader::bindArrayBuffer(GLuint attribLocation, GLuint bufferObject, GLenum 
     if (use) glUseProgram(programBak);
 }
 
+/**
+ * @brief Bind the shader
+ * 
+ */
 void Shader::use()
 {
     glUseProgram(programID);
 }
 
+/**
+ * @brief Returns if the shader compiled correctly
+ * 
+ * @return true Shader compiled
+ * @return false Shader did not compile, check for errors
+ */
 bool Shader::isCompiled()
 {
     return compiled;
 }
 
+/**
+ * @brief Get the error string
+ * 
+ * @return std::string Error string
+ */
 std::string Shader::getErrorString()
 {
     return errStr;
 }
 
-Shader Shader::loadShaderFromFile(std::string path)
+/**
+ * @brief Load a shader from a file
+ * 
+ * @param name The name of the shader
+ * @return Shader The shader object
+ */
+Shader Shader::loadShaderFromFile(std::string name)
 {
     std::string directory = "./resources/shaders/";
     std::string vertExtension = "vert";
     std::string fragExtension = "frag";
-    std::string vertexFileName = directory + path + "." + vertExtension;
-    std::string fragmentFileName = directory + path + "." + fragExtension;
+    std::string vertexFileName = directory + name + "." + vertExtension;
+    std::string fragmentFileName = directory + name + "." + fragExtension;
     std::string errStr;
     std::string vertexSrc;
     std::ifstream vertexFile((vertexFileName).c_str());
@@ -151,6 +219,12 @@ Shader Shader::loadShaderFromFile(std::string path)
     return Shader(errStr);
 }
 
+/**
+ * @brief Get the shader log
+ * 
+ * @param shader The shader id
+ * @return std::string The shader log
+ */
 std::string Shader::getShaderLog(GLuint shader)
 {
     int maxLogLength;
@@ -160,6 +234,12 @@ std::string Shader::getShaderLog(GLuint shader)
     return std::string(infoLog);
 }
 
+/**
+ * @brief Get the program log
+ * 
+ * @param program The program id
+ * @return std::string The program log
+ */
 std::string Shader::getProgramLog(GLuint program)
 {
     int maxLogLength;
@@ -167,4 +247,123 @@ std::string Shader::getProgramLog(GLuint program)
     char infoLog[maxLogLength];
     glGetProgramInfoLog(program, maxLogLength, 0, infoLog);
     return std::string(infoLog);
+}
+
+/**
+ * @brief Set a float in the shader
+ * 
+ * @param uniform The uniform name
+ * @param f1 The value
+ */
+void Shader::set(std::string uniform, float f1)
+{
+    this->use();
+    glUniform1f(this->getUniformLocation(uniform), f1);
+}
+
+/**
+ * @brief Set a vec2 in the shader
+ * 
+ * @param uniform The uniform name
+ * @param f1 The first value
+ * @param f2 The second value
+ */
+void Shader::set(std::string uniform, float f1, float f2)
+{
+    this->use();
+    glUniform2f(this->getUniformLocation(uniform), f1, f2);
+}
+
+/**
+ * @brief Set a vec3 in the shader
+ * 
+ * @param uniform The uniform name
+ * @param f1 The first value
+ * @param f2 The second value
+ * @param f3 The third value
+ */
+void Shader::set(std::string uniform, float f1, float f2, float f3)
+{
+    this->use();
+    glUniform3f(this->getUniformLocation(uniform), f1, f2, f3);
+}
+
+/**
+ * @brief Set a vec4 in the shader
+ * 
+ * @param uniform The uniform name
+ * @param f1 The first value
+ * @param f2 The second value
+ * @param f3 The third value
+ * @param f4 The fourth value
+ */
+void Shader::set(std::string uniform, float f1, float f2, float f3, float f4)
+{
+    this->use();
+    glUniform4f(this->getUniformLocation(uniform), f1, f2, f3, f4);
+}
+
+/**
+ * @brief Set an int in the shader
+ * 
+ * @param uniform The uniform name
+ * @param f1 The value
+ */
+void Shader::set(std::string uniform, int f1)
+{
+    this->use();
+    glUniform1i(this->getUniformLocation(uniform), f1);
+}
+
+/**
+ * @brief Set a vec2 in the shader
+ * 
+ * @param uniform The uniform name
+ * @param f1 The first value
+ * @param f2 The second value
+ */
+void Shader::set(std::string uniform, int f1, int f2)
+{
+    this->use();
+    glUniform2i(this->getUniformLocation(uniform), f1, f2);
+}
+
+/**
+ * @brief Set a vec3 in the shader
+ * 
+ * @param uniform The uniform name
+ * @param f1 The first value
+ * @param f2 The second value
+ * @param f3 The third value
+ */
+void Shader::set(std::string uniform, int f1, int f2, int f3)
+{
+    this->use();
+    glUniform3i(this->getUniformLocation(uniform), f1, f2, f3);
+}
+
+/**
+ * @brief Set a vec4 in the shader
+ * 
+ * @param uniform The uniform name
+ * @param f1 The first value
+ * @param f2 The second value
+ * @param f3 The third value
+ * @param f4 The fourth value
+ */
+void Shader::set(std::string uniform, int f1, int f2, int f3, int f4)
+{
+    this->use();
+    glUniform4i(this->getUniformLocation(uniform), f1, f2, f3, f4);
+}
+
+/**
+ * @brief Set a vec4 in the shader to a color
+ * 
+ * @param uniform The uniform name
+ * @param c The color value
+ */
+void Shader::set(std::string uniform, Color c)
+{
+    this->set(uniform, c.r, c.g, c.b, c.a);
 }

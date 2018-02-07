@@ -20,6 +20,7 @@ public:
     void bind();
     void unbind();
     Texture getTexture();
+    void remove();
 
 };
 

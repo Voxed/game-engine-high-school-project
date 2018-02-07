@@ -1,10 +1,23 @@
 #include "SpriteFont.h"
 
+/**
+ * @brief Initialize empty sprite font
+ * 
+ */
 SpriteFont::SpriteFont() 
 {
 
 }
 
+/**
+ * @brief Initialize spritefont
+ * 
+ * @param t A pointer to a texture
+ * @param c The letters included in the texture
+ * @param cw The row size
+ * @param ch The column size
+ * @param ls The spacing between letters
+ */
 SpriteFont::SpriteFont(Texture* t, std::string c, int cw, int ch, int ls)
 {
     font_texture = t;
@@ -14,6 +27,17 @@ SpriteFont::SpriteFont(Texture* t, std::string c, int cw, int ch, int ls)
     letter_spacing = ls;
 }
 
+/**
+ * @brief Get a sprite list from a string
+ * 
+ * @param text The text to draw
+ * @param x The x coordinate
+ * @param y The y coordinate
+ * @param shader The shader to use
+ * @param depth The depth 
+ * @param scale The scale
+ * @return std::vector<Sprite> A list of sprites representing the text
+ */
 std::vector<Sprite> SpriteFont::getSprites(std::string text, int x, int y, Shader * shader, float depth, float scale)
 {
     std::vector<Sprite> sprites;
@@ -37,12 +61,25 @@ std::vector<Sprite> SpriteFont::getSprites(std::string text, int x, int y, Shade
     return sprites;
 }
 
+/**
+ * @brief Get width of the font
+ * 
+ * @param length The length of the string to get the width of
+ * @param scale The scale
+ * @return float The width of the string
+ */
 float SpriteFont::getWidth(int length, float scale)
 {
     float font_width = font_texture->getWidth()/characters_row;
     return length*(font_width+letter_spacing)*scale;
 }
 
+/**
+ * @brief Get the height of the font
+ * 
+ * @param scale The scale
+ * @return float 
+ */
 float SpriteFont::getHeight(float scale)
 {
     float font_height = font_texture->getHeight()/characters_height;

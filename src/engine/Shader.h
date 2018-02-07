@@ -27,6 +27,16 @@ public:
     std::string getErrorString();
 
     static Shader loadShaderFromFile(std::string path);
+
+    void set(std::string, float);;
+    void set(std::string, float, float);
+    void set(std::string, float, float, float);
+    void set(std::string, float, float, float, float);
+    void set(std::string, int);
+    void set(std::string, int, int);
+    void set(std::string, int, int, int);
+    void set(std::string, int, int, int, int);
+    void set(std::string, Color);
 };
 
 #endif
