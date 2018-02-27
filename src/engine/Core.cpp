@@ -1,12 +1,5 @@
 #include "Core.h"
 
-/**
- * @brief Initialize the engine core
- * 
- * @param title The title of the window
- * @param width The width of the window
- * @param height The height of the window
- */
 Core::Core(char * title, int width, int height) 
 {
     int sdlErrorCode = Core::initSDL();
@@ -26,32 +19,17 @@ Core::Core(char * title, int width, int height)
     error = true;
 }
 
-/**
- * @brief Clean up
- * 
- */
 Core::~Core()
 {
     SDL_DestroyWindow(window);
     SDL_Quit();
 }
 
-/**
- * @brief Returns initialization error
- * 
- * @return true Initialization successful
- * @return false Initialization failed
- */
 bool Core::hasError()
 {
     return error;
 }
 
-/**
- * @brief Initialize SDL
- * 
- * @return int Zero if initialization is successful
- */
 int Core::initSDL()
 {
     int errorCode = SDL_Init( SDL_INIT_VIDEO );
@@ -63,11 +41,6 @@ int Core::initSDL()
     return 0;
 }
 
-/**
- * @brief Initialize window
- * 
- * @return int Zero if initialization is successful
- */
 int Core::initWindow(char * title, int width, int height)
 {
     window = SDL_CreateWindow(
@@ -86,11 +59,6 @@ int Core::initWindow(char * title, int width, int height)
     return 0;
 }
 
-/**
- * @brief Initialize OpenGL
- * 
- * @return int Zero if initialization is successful
- */
 int Core::initGL()
 {
     context = SDL_GL_CreateContext( window );
@@ -118,11 +86,6 @@ int Core::initGL()
     return 0;
 }
 
-/**
- * @brief Starts the game
- * 
- * @return int Exist status
- */
 int Core::start()
 {
     Logic l = Logic(this);
@@ -229,55 +192,27 @@ int Core::start()
     }
 }
 
-/**
- * @brief Change screen
- * 
- * @param The screen to be used
- */
 void Core::setScreen(Screen * scr)
 {
     scr->core = this;
     this->scr = scr;
 }
 
-/**
- * @brief Get the current screen
- * 
- * @return Screen* A pointer to the current screen
- */
 Screen * Core::getScreen()
 {
     return scr;
 }
 
-/**
- * @brief Returns if the program has been started.
- * 
- * Useful for if you wan't functions to work in screen initializations
- * 
- * @return true Program has not started
- * @return false Program has started
- */
 bool Core::hasStarted()
 {
     return started;
 }
 
-/**
- * @brief Returns the current fps
- * 
- * @return int The current fps
- */
 int Core::getFPS() 
 {
     return fps;
 }
 
-/**
- * @brief Returns the window width
- * 
- * @return int Window width
- */
 int Core::getWidth()
 {
     int w;
@@ -285,11 +220,6 @@ int Core::getWidth()
     return w;
 }
 
-/**
- * @brief Returns the window height
- * 
- * @return int Window height
- */
 int Core::getHeight()
 {
     int h;

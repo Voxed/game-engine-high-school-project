@@ -6,5 +6,7 @@
 #include "engine/Mesh.h"
 #include "engine/RenderTarget.h"
 #include "engine/Noise.h"
+#include "engine/ecs/ECS.h"
+#include "engine/HelperFunctions.h"
 
 #endif

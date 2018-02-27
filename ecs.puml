@@ -1,0 +1,53 @@
+@startuml test
+
+skinparam shadowing false
+skinparam monochrome true
+
+Data.PlayerData : number: int
+Data.PlayerData --> Components.Player
+
+Data.PositionData : x: float
+Data.PositionData : y: float
+Data.PositionData --> Components.Position
+
+Data.VelocityData : x: float
+Data.VelocityData : y: float
+Data.VelocityData --> Components.Velocity
+
+Data.MortalityData --> Components.Mortality
+
+Data.AIData --> Components.AI
+
+Components.Velocity : entities: Vector<Entity>
+Components.Velocity --> Player.Entity
+Components.Velocity --> Enemy.Entity
+Components.Velocity : data: Map<Entity, VelocityData>
+
+Components.Position : entities: Vector<Entity>
+Components.Position --> Player.Entity
+Components.Position --> Enemy.Entity
+Components.Position : data: Map<Entity, PositionData>
+
+Components.Mortality : entities: Vector<Entity>
+Components.Mortality --> Player.Entity
+Components.Mortality --> Enemy.Entity
+Components.Mortality : data: Map<Entity, MortalityData>
+
+Components.AI : entities: Vector<Entity>
+Components.AI --> Enemy.Entity
+Components.AI : data: Map<Entity, AIData>
+
+Components.Player : entities: Vector<Entity>
+Components.Player --> Player.Entity
+Components.Player : data: Map<Entity, ControlData>
+
+Player.Entity : data: Vector<Entity>
+Player.Entity : getComponent<T>()
+
+Enemy.Entity : data: Vector<Entity>
+Enemy.Entity : getComponent<T>()
+
+Player.Entity --> Renderers.PlayerRenderer
+Enemy.Entity --> Renderers.EnemyRenderer
+
+@enduml

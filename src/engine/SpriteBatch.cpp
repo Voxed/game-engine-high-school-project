@@ -1,20 +1,21 @@
 #include "SpriteBatch.h"
 
-/**
- * @brief Draw one sprite to the batch
- * 
- * @param sprite The sprite to draw
- */
+SpriteBatch::SpriteBatch()
+{
+
+}
+
+SpriteBatch::SpriteBatch(int width, int height)
+{
+    this -> height = height;
+    this -> width = width;
+}
+
 void SpriteBatch::draw(Sprite sprite)
 {
     sprites.push_back(sprite);
 }
 
-/**
- * @brief Draw multiple sprites to the batch
- * 
- * @param sprites The sprites to draw
- */
 void SpriteBatch::draw(std::vector<Sprite> sprites)
 {
     for(auto sprite : sprites)
@@ -23,11 +24,6 @@ void SpriteBatch::draw(std::vector<Sprite> sprites)
     }
 }
 
-/**
- * @brief Get a list of all the opaque sprites, sorted by texture and shader
- * 
- * @return std::map<Shader*, std::map<Texture*, std::vector<Sprite*>>> A list of sprites sorted by texture and shader
- */
 std::map<Shader*, std::map<Texture*, std::vector<Sprite*>>> SpriteBatch::getOpaqueSprites()
 {
 
@@ -53,11 +49,6 @@ std::map<Shader*, std::map<Texture*, std::vector<Sprite*>>> SpriteBatch::getOpaq
     return sprites_by_texture_by_shader;
 };
 
-/**
- * @brief Get a list of all transparent sprite
- * 
- * @return std::vector<Sprite*> A list of all transparent sprites
- */
 std::vector<Sprite*> SpriteBatch::getTransparentSprites()
 {
     std::vector<Sprite*> sorted_sprites;
@@ -72,12 +63,6 @@ std::vector<Sprite*> SpriteBatch::getTransparentSprites()
     return sorted_sprites;
 }
 
-/**
- * @brief Empty the sprite batch
- *
- * And remove all temporary textures
- * 
- */
 void SpriteBatch::clear()
 {
     //Remove all temporary textures
@@ -92,25 +77,21 @@ void SpriteBatch::clear()
     sprites.clear();
 }
 
-/**
- * @brief Render spritebatch to the canvas
- * 
- * @param width The width of the canvas
- * @param height The height of the canvas
- */
-void SpriteBatch::render(int width, int height)
+int SpriteBatch::getHeight()
+{
+    return height;
+}
+
+int SpriteBatch::getWidth()
+{
+    return width;
+}
+
+void SpriteBatch::render()
 {
     render(0, width, 0, height);
 }
 
-/**
- * @brief Render spritebatch to the canvas
- * 
- * @param left The left of the canvas
- * @param right The right of the canvas
- * @param bottom The bottom of the canvas
- * @param top The top of the canvas
- */
 void SpriteBatch::render(int left, int right, int bottom, int top)
 {
     glm::mat4 projectionMatrix = glm::ortho((float)left, (float)right, (float)bottom, (float)top, 1.0f, -1.0f);

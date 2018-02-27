@@ -1,0 +1,2 @@
+#!/bin/bash
+sudo apt-get install libglew-dev libsdl2-dev libglm-dev libsdl2-image-dev

@@ -1,0 +1,13 @@
+@startuml
+
+class Entity
+
+Entity : -components: map<integer, Component>
+Entity : +getComponent<C>(): Component
+
+class Component
+
+class System
+
+
+@enduml

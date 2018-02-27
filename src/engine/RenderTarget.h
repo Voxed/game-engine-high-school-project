@@ -13,15 +13,45 @@ class RenderTarget
     int vw_bak;
     int vh_bak;
 public:
+    /**
+     * @brief Initialize an empty render target
+     * 
+     */
     RenderTarget();
+    /**
+     * @brief Initialize a render target
+     * 
+     * @param width Render target width
+     * @param height Render target height
+     */
     RenderTarget(int width, int height);
-    ~RenderTarget();
+    //~RenderTarget();
 
+    /**
+     * @brief Bind the render target
+     * 
+     * All draw code will be directed at this target
+     * 
+     */
     void bind();
+    /**
+     * @brief Unbind the render target
+     * 
+     */
     void unbind();
+    /**
+     * @brief Get the render target texture
+     * 
+     * @return Texture The target texture
+     */
     Texture getTexture();
+    /**
+     * @brief Clear the render target
+     * 
+     * Free up memory
+     * 
+     */
     void remove();
-
 };
 
 #endif

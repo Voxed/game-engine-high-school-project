@@ -127,22 +127,11 @@ bool Shader::isCompiled()
     return compiled;
 }
 
-/**
- * @brief Get the error string
- * 
- * @return std::string Error string
- */
 std::string Shader::getErrorString()
 {
     return errStr;
 }
 
-/**
- * @brief Load a shader from a file
- * 
- * @param name The name of the shader
- * @return Shader The shader object
- */
 Shader Shader::loadShaderFromFile(std::string name)
 {
     std::string directory = "./resources/shaders/";
@@ -219,12 +208,6 @@ Shader Shader::loadShaderFromFile(std::string name)
     return Shader(errStr);
 }
 
-/**
- * @brief Get the shader log
- * 
- * @param shader The shader id
- * @return std::string The shader log
- */
 std::string Shader::getShaderLog(GLuint shader)
 {
     int maxLogLength;
@@ -234,12 +217,6 @@ std::string Shader::getShaderLog(GLuint shader)
     return std::string(infoLog);
 }
 
-/**
- * @brief Get the program log
- * 
- * @param program The program id
- * @return std::string The program log
- */
 std::string Shader::getProgramLog(GLuint program)
 {
     int maxLogLength;
@@ -249,120 +226,54 @@ std::string Shader::getProgramLog(GLuint program)
     return std::string(infoLog);
 }
 
-/**
- * @brief Set a float in the shader
- * 
- * @param uniform The uniform name
- * @param f1 The value
- */
 void Shader::set(std::string uniform, float f1)
 {
     this->use();
     glUniform1f(this->getUniformLocation(uniform), f1);
 }
 
-/**
- * @brief Set a vec2 in the shader
- * 
- * @param uniform The uniform name
- * @param f1 The first value
- * @param f2 The second value
- */
 void Shader::set(std::string uniform, float f1, float f2)
 {
     this->use();
     glUniform2f(this->getUniformLocation(uniform), f1, f2);
 }
 
-/**
- * @brief Set a vec3 in the shader
- * 
- * @param uniform The uniform name
- * @param f1 The first value
- * @param f2 The second value
- * @param f3 The third value
- */
 void Shader::set(std::string uniform, float f1, float f2, float f3)
 {
     this->use();
     glUniform3f(this->getUniformLocation(uniform), f1, f2, f3);
 }
 
-/**
- * @brief Set a vec4 in the shader
- * 
- * @param uniform The uniform name
- * @param f1 The first value
- * @param f2 The second value
- * @param f3 The third value
- * @param f4 The fourth value
- */
 void Shader::set(std::string uniform, float f1, float f2, float f3, float f4)
 {
     this->use();
     glUniform4f(this->getUniformLocation(uniform), f1, f2, f3, f4);
 }
 
-/**
- * @brief Set an int in the shader
- * 
- * @param uniform The uniform name
- * @param f1 The value
- */
 void Shader::set(std::string uniform, int f1)
 {
     this->use();
     glUniform1i(this->getUniformLocation(uniform), f1);
 }
 
-/**
- * @brief Set a vec2 in the shader
- * 
- * @param uniform The uniform name
- * @param f1 The first value
- * @param f2 The second value
- */
 void Shader::set(std::string uniform, int f1, int f2)
 {
     this->use();
     glUniform2i(this->getUniformLocation(uniform), f1, f2);
 }
 
-/**
- * @brief Set a vec3 in the shader
- * 
- * @param uniform The uniform name
- * @param f1 The first value
- * @param f2 The second value
- * @param f3 The third value
- */
 void Shader::set(std::string uniform, int f1, int f2, int f3)
 {
     this->use();
     glUniform3i(this->getUniformLocation(uniform), f1, f2, f3);
 }
 
-/**
- * @brief Set a vec4 in the shader
- * 
- * @param uniform The uniform name
- * @param f1 The first value
- * @param f2 The second value
- * @param f3 The third value
- * @param f4 The fourth value
- */
 void Shader::set(std::string uniform, int f1, int f2, int f3, int f4)
 {
     this->use();
     glUniform4i(this->getUniformLocation(uniform), f1, f2, f3, f4);
 }
 
-/**
- * @brief Set a vec4 in the shader to a color
- * 
- * @param uniform The uniform name
- * @param c The color value
- */
 void Shader::set(std::string uniform, Color c)
 {
     this->set(uniform, c.r, c.g, c.b, c.a);

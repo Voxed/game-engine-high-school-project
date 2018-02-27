@@ -2,12 +2,12 @@
 #define _GAME_H
 
 #include "Engine.h"
-#include "ScreenMenu.h"
+#include "GameScreen.h"
 
 class Game
 {
     Core core;
-    ScreenMenu menu;
+    GameScreen menu;
 public:
     Game();
     bool hasError();

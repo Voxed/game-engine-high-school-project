@@ -1,8 +1,7 @@
 #include "Game.h"
 
-Game::Game() : core((char *)"Voxel Engine Demo: Spacy", 720, 480)
+Game::Game() : core((char *)"GALAXY ONE ARCADE MACHINE", 720*2, 480*2)
 {
-
 }
 
 bool Game::hasError()
@@ -14,4 +13,5 @@ int Game::run()
 {
     core.setScreen(&menu);
     return core.start();
+    
 }

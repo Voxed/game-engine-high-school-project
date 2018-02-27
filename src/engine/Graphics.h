@@ -26,7 +26,19 @@ class Graphics
     SpriteBatch batch;
     Core * core;
 public:
+    /**
+     * @brief Initialize new graphics object
+     * 
+     * @param core The main core
+     * @param logic The logic object
+     */
     Graphics(Core * c, Logic& logic);
+    /**
+     * @brief The main rendering event
+     * 
+     * Called from the core
+     * 
+     */
     void render();
 };
 #endif

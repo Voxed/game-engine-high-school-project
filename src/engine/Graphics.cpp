@@ -1,10 +1,5 @@
 #include "Graphics.h"
-/**
- * @brief Initialize new graphics object
- * 
- * @param core The main core
- * @param logic The logic object
- */
+
 Graphics::Graphics(Core * core, Logic& logic) : logic(logic)
 {
         
@@ -12,15 +7,10 @@ Graphics::Graphics(Core * core, Logic& logic) : logic(logic)
     glEnable( GL_DEPTH_TEST );
 
     this->core = core;
+
+    batch = SpriteBatch(core->getHeight(), core->getWidth());
 }
 
-
-/**
- * @brief The main rendering event
- * 
- * Called from the core
- * 
- */
 void Graphics::render()
 {
     Color c = core->getScreen()->backgroundColor;

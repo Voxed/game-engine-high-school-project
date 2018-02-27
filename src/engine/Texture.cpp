@@ -1,19 +1,7 @@
 #include "Texture.h"
 
-/**
- * @brief Initialize empty object
- * 
- */
-Texture::Texture()
-{
+Texture::Texture(){}
 
-}
-
-/**
- * @brief Initialize texture object from file
- * 
- * @param filePath The relative file path to load from
- */
 Texture::Texture(std::string filePath)
 {
     SDL_Surface * surface = IMG_Load(filePath.c_str());
@@ -30,8 +18,6 @@ Texture::Texture(std::string filePath)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 }
-
-//null(void);
 
 Texture::Texture(std::vector<Color> colors, int width, int height, int mode)
 {
@@ -56,13 +42,6 @@ Texture::Texture(std::vector<Color> colors, int width, int height, int mode)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 }
 
-/**
- * @brief Initialize a texture of empty data
- * 
- * @param w The width of the empty texture
- * @param h The height of the empty texture
- * @param mode The mode of the empty texture
- */
 Texture::Texture(int w, int h, int mode)
 {
     glGenTextures(1, &textureID);
@@ -74,51 +53,27 @@ Texture::Texture(int w, int h, int mode)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 }
 
-/**
- * @brief Get the texture id
- * 
- * @return GLuint The texture id
- */
 GLuint Texture::getTextureID()
 {
     return textureID;
 }
 
-/**
- * @brief Get the texture height
- * 
- * @return int The texture height
- */
 int Texture::getHeight()
 {
     return height;
 }
 
-/**
- * @brief Get the texture width
- * 
- * @return int The texture width
- */
 int Texture::getWidth()
 {
     return width;
 }
 
-/**
- * @brief Bind the texture to the target
- * 
- * @param target The texture target to bind to
- */
 void Texture::bind(GLenum target)
 {
     glActiveTexture( target );
     glBindTexture( GL_TEXTURE_2D, getTextureID() );
 }
 
-/**
- * @brief Clear up texture memory
- * 
- */
 void Texture::remove()
 {
     glDeleteTextures(1, &textureID);

@@ -1,19 +1,10 @@
 #include "Mesh.h"
 
-/**
- * @brief Initialize an empty mesh object
- * 
- */
 Mesh::Mesh()
 {
 
 }
 
-/**
- * @brief Load a mesh object from file
- * 
- * @param path Relative path to file
- */
 Mesh::Mesh(const char* path)
 {
     std::vector< GLfloat > temp_vertices;
